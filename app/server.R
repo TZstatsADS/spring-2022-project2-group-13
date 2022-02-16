@@ -35,8 +35,7 @@ library(albersusa)
     
     
     
-setwd('/Users/users/Desktop/test/test11')
-    
+# setwd('/Users/users/Desktop/test/test11')
 ###map for covid
 
 my_map_theme <- function(){

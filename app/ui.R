@@ -81,10 +81,10 @@ shinyUI(dashboardPage(
               
       tabItem(tabName = "b", 
         fluidPage(
-          actionButton("free_meals","Free Meals Locations",icon=icon("utensils",  lib = "font-awesome")),
-          actionButton("health","Mental Health Service",icon=icon("utensils",  lib = "font-awesome")),
-          actionButton("textile","Textile Drop-Off Locations",icon=icon("utensils",  lib = "font-awesome")),
-          actionButton("job","Directory Of Job Centers",icon=icon("utensils",  lib = "font-awesome")),
+          actionButton("free_meals","Free Meals Locations",icon=icon("utensils",  lib = "font-awesome"),style="color: #fff; background-color: #94a4db; border-color: #94a4db"),
+          actionButton("health","Mental Health Service",icon=icon("hospital",  lib = "font-awesome"),style="color: #fff; background-color: #94a4db; border-color: #94a4db"),
+          actionButton("textile","Textile Drop-Off Locations",icon=icon("tshirt",  lib = "font-awesome"),style="color: #fff; background-color: #94a4db; border-color: #94a4db"),
+          actionButton("job","Directory Of Job Centers",icon=icon("briefcase",  lib = "font-awesome"),style="color: #fff; background-color: #94a4db; border-color: #94a4db"),
           br(),
           p("The plot won't update until the button is clicked.",
             " Without the use of ", code("isolate()"),
