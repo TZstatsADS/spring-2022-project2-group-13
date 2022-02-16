@@ -1,204 +1,276 @@
-#
-# This is the server logic of a Shiny web application. You can run the
-# application by clicking 'Run App' above.
-#
-# Find out more about building applications with Shiny here:
-#
-#    http://shiny.rstudio.com/
-#
-###############################Install Related Packages #######################
-if (!require("shiny")) {
-    install.packages("shiny")
-    library(shiny)
-}
-if (!require("leaflet")) {
-    install.packages("leaflet")
-    library(leaflet)
-}
-if (!require("leaflet.extras")) {
-    install.packages("leaflet.extras")
-    library(leaflet.extras)
-}
-if (!require("dplyr")) {
-    install.packages("dplyr")
-    library(dplyr)
-}
-if (!require("magrittr")) {
-    install.packages("magrittr")
-    library(magrittr)
-}
-if (!require("mapview")) {
-    install.packages("mapview")
-    library(mapview)
-}
-if (!require("leafsync")) {
-    install.packages("leafsync")
-    library(leafsync)
-}
-
-#Data Processing
-total_citi_bike_df = read.csv('../data/citibike_data.csv')
-##compute the daily in and out difference for the station
-total_citi_bike_df$day_diff = total_citi_bike_df$endcount - total_citi_bike_df$startcount
-#assign each column to weekend or weekday
-total_citi_bike_df$weekend_or_weekday = ifelse(total_citi_bike_df$weekday %in% c('Saturday','Sunday'), "Weekend", "Weekday")
-
-#station info
-citi_bike_station_info <- total_citi_bike_df[,c('station_id','station_name','station_longitude','station_latitude')]
-#remove the duplicates based on station id 
-citi_bike_station_info <- citi_bike_station_info[!duplicated(citi_bike_station_info[ , c("station_id")]),]
-
-#split the bike data to pre-covid and covid time period
-citi_bike_pre_covid_df = total_citi_bike_df[difftime(total_citi_bike_df$date,"2019-05-31")<=0,] #2019-05-01 ~ 2019-05-31
-citi_bike_covid_df = total_citi_bike_df[difftime(total_citi_bike_df$date,"2020-04-30")>=0,] #2020-05-01 ~ 2021-05-31
-
-
-# Define server logic required to draw a histogram
+if (!require("shiny")) install.packages("shiny")
+library(shiny)
+if (!require("shinydashboard")) install.packages("shinydashboard")
+library(shinydashboard)
 shinyServer(function(input, output) {
+if (!require("leaflet")) { install.packages("leaflet")}
+library(leaflet)
+if (!require("dplyr")) { install.packages("dplyr")}
+library(dplyr)
+if (!require("tidyverse")) { install.packages("tidyverse")}
+library(tidyverse)
+if (!require("DT")) { install.packages("DT")}
+library(DT)
+if (!require("ggplot2")) { install.packages("ggplot2")}
+library(ggplot2)
+if (!require("lubridate")) { install.packages("lubridate")}
+library(lubridate)
+if (!require("plotly")) { install.packages("plotly")}
+library(plotly)
+if (!require("hrbrthemes")) { install.packages("hrbrthemes")}
+library(hrbrthemes)
+if (!require("highcharter")) { install.packages("highcharter")}
+library(highcharter)
+if (!require("RColorBrewer")) { install.packages("RColorBrewer")}
+library(RColorBrewer)
+if(!require(fontawesome)) devtools::install_github("rstudio/fontawesome")
+if (!require("geojsonio")) { install.packages("geojsonio")}
+library(geojsonio)
+if (!require("readr")) { install.packages("readr")}
+library(readr)
+remotes::install_git("https://git.sr.ht/~hrbrmstr/albersusa")
+if (!require(tidyverse)) install.packages('tidyverse')
+library(tidyverse)
+library(albersusa)    
+    
+    
+    
+setwd('/Users/users/Desktop/test/test11')
+    
+###map for covid
 
-    ## Map Tab section
-    
-    output$left_map <- renderLeaflet({
-    
-    #adjust for weekday/weekend effect
-    if (input$adjust_time =='Overall') {
-        leaflet_plt_df <- citi_bike_pre_covid_df %>% 
-                            group_by(station_id) %>%
-                            summarise(total_start_count = sum(startcount),
-                                      total_end_count = sum(endcount),
-                                      total_day_diff = sum(day_diff),
-                                      total_diff_percentage = sum(day_diff)/sum(startcount),
-                            ) %>% left_join(citi_bike_station_info,by='station_id')
-    } else {
-        leaflet_plt_df <- citi_bike_pre_covid_df %>% 
-                            filter(weekend_or_weekday == input$adjust_time) %>%
-                            group_by(station_id) %>%
-                                summarise(total_start_count = sum(startcount),
-                                          total_end_count = sum(endcount),
-                                          total_day_diff = sum(day_diff),
-                                          total_diff_percentage = sum(day_diff)/sum(startcount),
-                                ) %>% left_join(citi_bike_station_info,by='station_id')
-                            } 
+my_map_theme <- function(){
+    theme(panel.background=element_blank(),
+          axis.text=element_blank(),
+          axis.ticks=element_blank())
+}
 
+us_states <- usa_sf("laea")
+
+us_states_covid <- read_csv("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv", col_types = cols(date = col_date(format = "%Y-%m-%d")))
+# us_states_covid$state
+state_pop_millions <- read.csv('2019_Census_US_Population_Data_By_State_Lat_Long.csv')
+# state_pop_millions
+state_pop_millions <- state_pop_millions %>%
+    rename(`state` = 'STATE',
+           `population_millions` = 'POPESTIMATE2019')
+
+covid_data <- us_states_covid %>%
+    left_join(state_pop_millions, c("state" = "state")) %>%
+    mutate(case_rate = (cases*1000000/population_millions)) %>%
+    mutate(death_rate = (deaths*1000000/population_millions))
+
+fullmap <- function(myrate, mydate){
+    if(myrate == "Cases"){
+        testday <- covid_data %>%
+            filter(date == as.Date(mydate))
         
-    map_2019 <- leaflet_plt_df %>%
-         leaflet(options = leafletOptions(minZoom = 11, maxZoom = 13)) %>%
-         addTiles() %>%
-         addProviderTiles("CartoDB.Positron",
-                          options = providerTileOptions(noWrap = TRUE)) %>%
-         setView(-73.9834,40.7504,zoom = 12)
-     
-     if (input$adjust_score == 'start_cnt') {
-         map_2019 %>%
-             addHeatmap(
-                        lng=~station_longitude,
-                        lat=~station_latitude,
-                        intensity=~total_start_count,
-                        max=4000,
-                        radius=8,
-                        blur=10)
-     }else if (input$adjust_score == 'end_cnt') {
-         map_2019 %>%
-             addHeatmap(
-                        lng=~station_longitude,
-                        lat=~station_latitude,
-                        intensity=~total_end_count,
-                        max=4000,
-                        radius=8,
-                        blur=10)
-     } else if (input$adjust_score == 'day_diff_absolute'){
-         map_2019 %>%
-             addHeatmap(
-                        lng=~station_longitude,
-                        lat=~station_latitude,
-                        intensity=~total_day_diff,
-                        max=50,
-                        radius=8,
-                        blur=10)
-         
-     }else if (input$adjust_score == 'day_diff_percentage'){
-         map_2019 %>%
-             addHeatmap(
-                        lng=~station_longitude,
-                        lat=~station_latitude,
-                        intensity=~total_diff_percentage,#change to total day diff percentage
-                        max=0.1,
-                        radius=8,
-                        blur=10)
-         
-     }
-     }) #left map plot
+        map <- us_states %>%
+            left_join(testday, c("name"="state"))
+        
+        covid_map <- ggplot(map) +
+            geom_sf(aes(fill=case_rate)) +
+            scale_fill_continuous(low=munsell::mnsl("5P 7/12"), high =munsell::mnsl("5P 2/12"), name = "cases per million people") 
+        
+        covid_map2 <- map %>%
+            mutate(text = paste("<b>",name,"</b>\n", round(case_rate, digits = 2))) %>%
+            ggplot() +
+            geom_sf(aes(fill=case_rate, text=text), color="black") +
+            scale_fill_continuous(low=munsell::mnsl("5P 7/12"), high =munsell::mnsl("5P 2/12"), name = "Cases per Million") +
+            my_map_theme()
+        
+        
+        covid_map3 <- ggplotly(covid_map2,tooltip = "text") %>%
+            style(hoveron = "fills")
+        
+        covid_map3
+    }
+    else {
+        testday <- covid_data %>%
+            filter(date == as.Date(mydate))
+        
+        map <- us_states %>%
+            left_join(testday, c("name"="state"))
+        
+        covid_map <- ggplot(map) +
+            geom_sf(aes(fill=death_rate)) +
+            scale_fill_continuous(low=munsell::mnsl("5P 7/12"), high =munsell::mnsl("5P 2/12"), name = "Deaths per Million")
+        
+        covid_map2 <- map %>%
+            mutate(text = paste("<b>",name,"</b>\n", round(death_rate, digits = 2))) %>%
+            ggplot() +
+            geom_sf(aes(fill=death_rate, text=text), color="black") +
+            scale_fill_continuous(low=munsell::mnsl("5P 7/12"), high =munsell::mnsl("5P 2/12"), name = "Deaths per Million") +
+            my_map_theme()
+        
+        
+        covid_map3 <- ggplotly(covid_map2,tooltip = "text") %>%
+            style(hoveron = "fills")
+        
+        covid_map3
+    }
+}
+
+output$TitleText <- renderText(paste("Cumulative Covid ",input$choosenstat, "per Million as of ", input$choosendate))
+
+output$map <- renderPlotly({
+    fullmap(input$choosenstat,input$choosendate)
+})
+
+
+
+
+
+
+
+### Map ###
+output$mymap <- renderLeaflet({ 
+    leaflet(options = leafletOptions(zoomControl = FALSE)) %>%
+        htmlwidgets::onRender(
+            "function(el, x) {
+                    L.control.zoom({ position: 'bottomright' }).addTo(this)
+                }"
+        ) %>%
+        addProviderTiles("CartoDB.Voyager") %>%
+        setView(lng = -73.935242, lat = 40.730610, zoom = 11)})
+
+# #testing covid
+# df_testing<-read.csv('https://data.cityofnewyork.us/resource/7a57-qgkz.csv',stringsAsFactors = FALSE)
+# 
+# observeEvent(input$testing, {
+#     proxy <- leafletProxy("mymap", data = df_testing)
+#     proxy %>% clearControls()
+#     
+#     # clear the map
+#     leafletProxy("mymap", data = df_testing) %>%
+#         clearShapes() %>%
+#         clearMarkers() %>%
+#         addProviderTiles("CartoDB.Voyager") %>%
+#         fitBounds(-74.354598, 40.919500, -73.761545, 40.520024)
+#     
+#     leafletProxy("mymap", data = df_testing) %>%
+#         addAwesomeMarkers(~longitude, ~latitude,
+#                           icon = awesomeIcons(markerColor = "blue",
+#                                               text = fa("hospital")), label= ~assigned_vendor,
+#                           popup = paste(
+#                               "<b>Address:</b>", df_health$street_1,", ", df_health$city,  "<br>",
+#                               "<b>Phone:</b>", df_health$phone, "<br>",
+#                               "<b>Website:</b>", df_health$website, "<br>"))
+# })
+
+
+
+
+# free meals
+df_meals<-read.csv('https://data.cityofnewyork.us/resource/sp4a-vevi.csv', stringsAsFactors = FALSE)
+
+observeEvent(input$free_meals, {
+    proxy <- leafletProxy("mymap", data = df_meals)
+    palette_fm = c("#aebbff","#92b2ff", "#8ad3ff")
+    color1 <- colorFactor(palette =palette_fm, df_meals$accessibility)
+    proxy %>% clearControls()
     
-    output$right_map <- renderLeaflet({
-        #adjust for weekday/weekend effect
-        if (input$adjust_time =='Overall') {
-            leaflet_plt_df <- citi_bike_covid_df %>% 
-                group_by(station_id) %>%
-                summarise(total_start_count = sum(startcount),
-                          total_end_count = sum(endcount),
-                          total_day_diff = sum(day_diff),
-                          total_diff_percentage = sum(day_diff)/sum(startcount),
-                ) %>% left_join(citi_bike_station_info,by='station_id')
-        } else {
-            leaflet_plt_df <- citi_bike_covid_df %>% 
-                filter(weekend_or_weekday == input$adjust_time) %>%
-                group_by(station_id) %>%
-                summarise(total_start_count = sum(startcount),
-                          total_end_count = sum(endcount),
-                          total_day_diff = sum(day_diff),
-                          total_diff_percentage = sum(day_diff)/sum(startcount),
-                ) %>% left_join(citi_bike_station_info,by='station_id')
-        } 
-        #initial the map to plot on
-        map_2020 <- leaflet_plt_df %>%
-            leaflet(options = leafletOptions(minZoom = 11, maxZoom = 13)) %>%
-            addTiles() %>%
-            addProviderTiles("CartoDB.Positron",
-                             options = providerTileOptions(noWrap = TRUE)) %>%
-            setView(-73.9834,40.7504,zoom = 12) 
-        
-        if (input$adjust_score == 'start_cnt') {
-            map_2020 %>%
-                addHeatmap(
-                           lng=~station_longitude,
-                           lat=~station_latitude,
-                            intensity=~total_start_count, #change to total start count
-                            max=4000,
-                            radius=8,
-                           blur=10)
-        }else if (input$adjust_score == 'end_cnt') {
-            map_2020 %>%
-                addHeatmap(
-                           lng=~station_longitude,
-                           lat=~station_latitude,
-                           intensity=~total_end_count,#change to total end count
-                           max=4000,
-                           radius=8,
-                           blur=10)
-        } else if (input$adjust_score == 'day_diff_absolute'){
-            map_2020 %>%
-                addHeatmap(
-                           lng=~station_longitude,
-                           lat=~station_latitude,
-                           intensity=~total_day_diff,#change to total day diff
-                           max=50,
-                           radius=8,
-                           blur=10)
-            
-        }else if (input$adjust_score == 'day_diff_percentage'){
-            map_2020 %>%
-                addHeatmap(
-                           lng=~station_longitude,
-                           lat=~station_latitude,
-                           intensity=~total_diff_percentage,#change to total day diff percentage
-                           max=0.1,
-                           radius=8,
-                           blur=10)
-            
-        }
-        
-    }) #right map plot
+    # clear the map
+    leafletProxy("mymap", data = df_meals) %>%
+        clearShapes() %>%
+        clearMarkers() %>%
+        addProviderTiles("CartoDB.Voyager") %>%
+        fitBounds(-74.354598, 40.919500, -73.761545, 40.520024)
+    
+    leafletProxy("mymap", data = df_meals)%>%
+        clearShapes() %>%
+        addProviderTiles("CartoDB.Voyager") %>%    
+        addCircleMarkers(~longitude, ~latitude, radius=10,
+                         color = ~color1(accessibility),
+                         label = paste(df_meals$schoolname, ', ', df_meals$siteaddress,', ', df_meals$city))%>%
+        addLegend("bottomright",
+                  pal = color1,
+                  values = df_meals$accessibility,
+                  title = "Status",
+                  opacity = 1)
+})
+
+
+
+# health center button
+df_health<-
+    read.csv("https://data.cityofnewyork.us/resource/8nqg-ia7v.csv", stringsAsFactors = FALSE)
+
+observeEvent(input$health, {
+    proxy <- leafletProxy("mymap", data = df_health)
+    proxy %>% clearControls()
+    
+    # clear the map
+    leafletProxy("mymap", data = df_health) %>%
+        clearShapes() %>%
+        clearMarkers() %>%
+        addProviderTiles("CartoDB.Voyager") %>%
+        fitBounds(-74.354598, 40.919500, -73.761545, 40.520024)
+    
+    leafletProxy("mymap", data = df_health) %>%
+        addAwesomeMarkers(~longitude, ~latitude,
+                          icon = awesomeIcons(markerColor = "blue",
+                                              text = fa("hospital")), label= ~name_1,
+                          popup = paste(
+                              "<b>Address:</b>", df_health$street_1,", ", df_health$city,  "<br>",
+                              "<b>Phone:</b>", df_health$phone, "<br>",
+                              "<b>Website:</b>", df_health$website, "<br>"))
+})
+
+
+# textile
+df_textile<-read.csv('https://data.cityofnewyork.us/resource/qnjm-wvu5.csv')
+
+observeEvent(input$textile, {
+    proxy <- leafletProxy("mymap", data = df_textile)
+    proxy %>% clearControls()
+    
+    # clear the map
+    leafletProxy("mymap", data = df_textile) %>%
+        clearShapes() %>%
+        clearMarkers() %>%
+        addProviderTiles("CartoDB.Voyager") %>%
+        fitBounds(-74.354598, 40.919500, -73.761545, 40.520024)
+    
+    leafletProxy("mymap", data = df_textile) %>%
+        addAwesomeMarkers(~longitude, ~latitude,
+                          icon = awesomeIcons(markerColor = "blue",
+                                              text = fa("tshirt")), label= ~items_accepted,
+                          popup = paste(
+                              "<b>Address:</b>", df_textile$address,", ", df_textile$borough,  "<br>",
+                              "<b>Phone:</b>", df_textile$public_phone, "<br>",
+                              "<b>Email:</b>", df_textile$public_email, "<br>"))
+})
+
+# job center button
+df_job<-read.csv('https://data.cityofnewyork.us/resource/9d9t-bmk7.csv', stringsAsFactors = FALSE)
+
+observeEvent(input$job, {
+    proxy <- leafletProxy("mymap", data = df_job)
+    proxy %>% clearControls()
+    
+    # clear the map
+    leafletProxy("mymap", data = df_job) %>%
+        clearShapes() %>%
+        clearMarkers() %>%
+        addProviderTiles("CartoDB.Voyager") %>%
+        fitBounds(-74.354598, 40.919500, -73.761545, 40.520024)
+    
+    leafletProxy("mymap", data = df_job) %>%
+        addAwesomeMarkers(~longitude, ~latitude,
+                          icon = awesomeIcons(markerColor = "blue",
+                                              text = fa("briefcase")), label= ~facility_name,
+                          popup = paste(
+                              "<b>Address:</b>", df_job$street_address,", ", df_job$city,  "<br>",
+                              "<b>Phone:</b>", df_job$phone_number_s, "<br>",
+                              "<b>Comment:</b>", df_job$comments, "<br>"))
+})
+
+#
+
+
 
 })
+
 
 
