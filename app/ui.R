@@ -27,7 +27,13 @@ shinyUI(dashboardPage(
                startExpanded = TRUE,
                menuSubItem("Covid Cases",tabName = "a"),
                menuSubItem("Dig by yourself",tabName = "b")),
-      menuItem("Analysis", tabName = "Analysis", icon = icon("tasks"))
+      menuItem("Analysis", tabName = "Analysis", icon = icon("tasks")),
+      menuItem("Analysis", tabName = "Analysis", icon = icon("chart-bar"),
+               startExpanded = TRUE,
+               menuSubItem("Covid New Case", tabName = "New"),
+               menuSubItem("NYC transportation",tabName = "both"),
+               menuSubItem("Only Subways",tabName = "subway"),
+               menuSubItem("Only Buses", tabName = "bus"))
   )),
   
     dashboardBody(
@@ -94,7 +100,17 @@ shinyUI(dashboardPage(
       ),
       tabItem(tabName = "Analysis",
               h2("To be continued")
-      )
+      ),
+      tabItem(tabName = "subway", 
+              fluidRow(htmlOutput("ggv_timeline_subway"), width=50, height=700)),
+      
+      tabItem(tabName = "bus",
+              fluidRow(htmlOutput("ggv_timeline_bus"), width=50, height=700)
+    ),
+    tabItem(tabName = 'both',
+            fluidRow(htmlOutput("ggv_timeline"), width=50, height=700)),
+    tabItem(tabName = "New",
+            fluidRow(htmlOutput("ggv_timeline_new"), width=50, height=700))
     )
   )
 ))
