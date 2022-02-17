@@ -35,7 +35,7 @@ library(lubridate)
 library(googleVis)
 
 shinyServer(function(input, output) {
-    setwd('/Users/Rachel/Desktop/test11')
+    setwd('/Users/users/Documents/GitHub/spring-2022-project2-group-13')
     
 ###map for covid
 
@@ -49,7 +49,7 @@ shinyServer(function(input, output) {
     
     us_states_covid <- read_csv("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv", col_types = cols(date = col_date(format = "%Y-%m-%d")))
     # us_states_covid$state
-    state_pop_millions <- read.csv('2019_Census_US_Population_Data_By_State_Lat_Long.csv')
+    state_pop_millions <- read.csv('data/2019_Census_US_Population_Data_By_State_Lat_Long.csv')
     state_pop_millions
     state_pop_millions <- state_pop_millions %>%
         rename(`state` = 'STATE',
@@ -57,8 +57,8 @@ shinyServer(function(input, output) {
     
     covid_data <- us_states_covid %>%
         left_join(state_pop_millions, c("state" = "state")) %>%
-        mutate(case_rate = (cases/population_millions)) %>%
-        mutate(death_rate = (deaths/population_millions))
+        mutate(case_rate = (cases*1000000/population_millions)) %>%
+        mutate(death_rate = (deaths*1000000/population_millions))
     
     fullmap <- function(myrate, mydate){
         if(myrate == "Cases"){

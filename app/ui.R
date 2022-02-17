@@ -23,9 +23,9 @@ shinyUI(dashboardPage(
   dashboardHeader(title ="NYC EXPRESS",titleWidth = 350),
   dashboardSidebar(
     sidebarMenu(
-      menuItem("Dashboard",tabName = "dashboard", icon = icon("dashboard")),
+      menuItem("Home",tabName = "Home", icon = icon("home")),
       
-      menuItem("Map", tabName = "Map", icon = icon("chart-bar"),
+      menuItem("Map", tabName = "Map", icon = icon("map"),
                startExpanded = TRUE,
                menuSubItem("Covid Cases",tabName = "a"),
                menuSubItem("Dig by yourself",tabName = "b")),
@@ -40,15 +40,20 @@ shinyUI(dashboardPage(
   
     dashboardBody(
     tabItems(
-        tabItem(tabName = "dashboard",
+        tabItem(tabName = "Home",
                 h2("To be continued")
         ),
         
         tabItem(tabName = "a", 
+                box(width=12,
+                    h2('Map - Covid Cases per US State'),
+                    h4("The map shows the cumulative and death cases per state in US."),
+                    h4("Please click on the select box to explore by yourself."),
+                    br(),
               fluidPage(
                 
                 # Application title
-                titlePanel("Map - Covid Cases per US State"),
+                # titlePanel("Map - Covid Cases per US State"),
                 
                 
                 # Sidebar with a slider input for date
@@ -78,15 +83,15 @@ shinyUI(dashboardPage(
                               "2019_Census_US_Population_Data_By_State_Lat_Long"))
                   )
                 )
-              )),
+              ))),
               
               
       tabItem(tabName = "b", 
         fluidPage(
-          actionButton("free_meals","Free Meals Locations",icon=icon("utensils",  lib = "font-awesome")),
-          actionButton("health","Mental Health Service",icon=icon("utensils",  lib = "font-awesome")),
-          actionButton("textile","Textile Drop-Off Locations",icon=icon("utensils",  lib = "font-awesome")),
-          actionButton("job","Directory Of Job Centers",icon=icon("utensils",  lib = "font-awesome")),
+          actionButton("free_meals","Free Meals Locations",icon=icon("utensils",  lib = "font-awesome"),style="color: #fff; background-color: #94a4db; border-color: #94a4db"),
+          actionButton("health","Mental Health Service",icon=icon("hospital",  lib = "font-awesome"),style="color: #fff; background-color: #94a4db; border-color: #94a4db"),
+          actionButton("textile","Textile Drop-Off Locations",icon=icon("tshirt",  lib = "font-awesome"),style="color: #fff; background-color: #94a4db; border-color: #94a4db"),
+          actionButton("job","Directory Of Job Centers",icon=icon("briefcase",  lib = "font-awesome"),style="color: #fff; background-color: #94a4db; border-color: #94a4db"),
           br(),
           p("The plot won't update until the button is clicked.",
             " Without the use of ", code("isolate()"),
