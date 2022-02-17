@@ -31,7 +31,12 @@ library(readr)
 remotes::install_git("https://git.sr.ht/~hrbrmstr/albersusa")
 if (!require(tidyverse)) install.packages('tidyverse')
 library(tidyverse)
-library(albersusa)    
+library(albersusa) 
+if (!require("lubridate")) {install.packages("lubridate")}
+if (!require("googleVis")) {install.packages("googleVis")}
+library(lubridate)
+library(googleVis)
+    
     
     
     
@@ -272,4 +277,117 @@ observeEvent(input$job, {
 })
 
 
+# Subway data
+shinyServer(function(input, output) {
+    data_by_day <- read.csv("https://raw.githubusercontent.com/nychealth/coronavirus-data/master/trends/data-by-day.csv", stringsAsFactors = FALSE)
+    data_subway <- read.csv("https://new.mta.info/document/20441")
+    subway <- data_subway%>%select(Date, `Subways..Total.Estimated.Ridership`)%>%
+        mutate(Date = ymd(as.Date(Date, "%m/%d/%Y")))%>%
+        mutate(weekday = weekdays(Date))%>%filter(weekday != "Saturday")%>%
+        filter(weekday != "Sunday")%>%
+        rename(ridership = `Subways..Total.Estimated.Ridership`)%>%
+        select(-weekday)
+    
+    bus <- data_subway%>%select(Date, `Buses..Total.Estimated.Ridership`)%>%
+        mutate(Date = ymd(as.Date(Date, "%m/%d/%Y")))%>%
+        rename(ridership = `Buses..Total.Estimated.Ridership`)%>%
+        mutate(weekday = weekdays(Date))%>%filter(weekday != "Saturday")%>%
+        filter(weekday != "Sunday")%>%
+        select(-weekday)
+    
+    both <- data_subway%>%select(Date, `Subways..Total.Estimated.Ridership`,
+                                 `Buses..Total.Estimated.Ridership`)%>%
+        mutate(Date = ymd(as.Date(Date, "%m/%d/%Y")))%>%
+        rename(Bus = `Buses..Total.Estimated.Ridership`,
+               Subway = `Subways..Total.Estimated.Ridership`)%>%
+        mutate(weekday = weekdays(Date))%>%filter(weekday != "Saturday")%>%
+        filter(weekday != "Sunday")%>%
+        select(-weekday)
+    subway_perc <- data_subway%>%select(Date, `Subways..Total.Estimated.Ridership`)%>%
+        mutate(Date = ymd(as.Date(Date, "%m/%d/%Y")))%>%
+        rename(ridership = `Subways..Total.Estimated.Ridership`)%>%
+        mutate(perc = lead(ridership,1))%>%na.omit%>%
+        mutate(perc = (ridership-perc)/perc *100)%>%select(-ridership)
+    both_perc <- data_by_day%>%select(date_of_interest, CASE_COUNT)%>%
+        mutate(Date = ymd(as.Date(date_of_interest,"%m/%d/%Y")))%>%
+        mutate(perc_covid = lead(CASE_COUNT,1))%>%na.omit%>%
+        mutate(perc_covid = (CASE_COUNT-perc_covid)/perc_covid *100)%>%
+        inner_join(subway_perc)%>%
+        select(Date, perc_covid,perc)%>%
+        pivot_longer(cols = c("perc_covid","perc"))
+    
+    g_timeline_subway = reactive({subway})
+    g_timeline_bus = reactive({bus})
+    g_timeline_both = reactive({both%>%pivot_longer(cols = c("Subway", "Bus"))})
+    
+
+    output$ggv_timeline_subway = renderGvis({
+        gvisAnnotationChart(g_timeline_subway() ,
+                             datevar="Date",
+                             numvar="ridership",
+                            options=list(
+                                title= "Subway",
+                                width= '95%',
+                                height= 500))
+        
+    
+})
+
+    output$ggv_timeline_bus = renderGvis({
+        gvisAnnotationChart(g_timeline_bus() ,
+                            datevar="Date",
+                            numvar="ridership",
+                            options=list(
+                                title= "Bus",
+                                width= '95%',
+                                height= 500))
+        
+        
+    })
+    output$ggv_timeline = renderGvis({
+        gvisAnnotationChart(g_timeline_both() ,
+                            datevar="Date",
+                            numvar="value",
+                            idvar = "name",
+                            options=list(
+                                title= "Bus",
+                                width= '95%',
+                                height= 500))
+ 
+    })
+    
+    g_timeline_covid_sub <- reactive({data_by_day%>%select(date_of_interest, CASE_COUNT)%>%
+            mutate(Date = ymd(as.Date(date_of_interest,"%m/%d/%Y")))%>%
+            inner_join(subway)%>%select(Date,CASE_COUNT,ridership)%>%
+            rename(New_Case = CASE_COUNT)%>%
+            pivot_longer(cols = c("New_Case", ridership))})
+    
+    g_timeline_covid <- reactive({data_by_day%>%select(date_of_interest, CASE_COUNT)%>%
+            mutate(Date = ymd(as.Date(date_of_interest,"%m/%d/%Y")))})
+        
+
+    output$ggv_timeline = renderGvis({
+        gvisAnnotationChart(g_timeline_both() ,
+                            datevar="Date",
+                            numvar="value",
+                            idvar = "name",
+                            options=list(
+                                title= "Bus",
+                                width= '95%',
+                                height= 500))
+        
+    })
+    
+    output$ggv_timeline_new = renderGvis({
+        gvisAnnotationChart(g_timeline_covid() ,
+                            datevar="Date",
+                            numvar="CASE_COUNT",
+                            options=list(
+                                title= "Bus",
+                                width= '95%',
+                                height= 500))
+        
+    })
+
+})
 
