@@ -375,6 +375,186 @@ shinyServer(function(input, output) {
                                 height= 500))
         
     })
+    
+    # Interactive plot
+    mentHeal <- read.csv("mentalHealth.csv")
+    output$bar_plt <- renderPlotly({
+        if (input$count == 1){
+            g1 <- mentHeal %>% group_by(physhlth) %>% 
+                count %>% 
+                mutate(physhlth = 
+                           factor(physhlth, levels = 
+                                      c("poor", "fair",'good','very good','excellent')))%>%
+                na.omit %>% 
+                ggplot(aes(y = n/sum(n), x = physhlth)) + geom_col(fill = "lightsalmon")+
+                labs(y = "Percentage")+
+                scale_y_continuous(labels = scales::percent)
+            g2 <- mentHeal %>% group_by(physhlth_c19) %>% 
+                count %>% mutate(physhlth_c19 = factor(physhlth_c19, levels = c('About the same',
+                                                                                'Better','Worse')))%>%
+                na.omit() %>% 
+                ggplot(aes(y = n/sum(n), x = physhlth_c19)) + geom_col(fill = "lightpink") + 
+                labs(y = "Percentage")+
+                scale_y_continuous(labels = scales::percent)
+            subplot(g1, g2) %>% layout(width = 1400,
+                                       yaxis = list (title = "Percentage"),
+                                       title = "PHYSICAL HEALTH before and after Covid-19")}
+        else if (input$count == 2){
+            g1 <- mentHeal%>% group_by(taskhelp) %>% 
+                count %>% mutate(taskhelp = replace(taskhelp, taskhelp == 'No, have not been able to get or find help but need help', "Need help, can't find any")) %>% 
+                mutate(taskhelp = 
+                           factor(taskhelp, levels = 
+                                      c('Yes',"Need help, can't find any"
+                                        ,'No, have not needed help'
+                                      )))%>%
+                na.omit %>% 
+                ggplot(aes(y = n/sum(n), x = taskhelp)) + geom_col(fill = "lightsalmon") + 
+                labs(y = "Percentage")+
+                scale_y_continuous(labels = scales::percent)
+            g2 <- mentHeal %>% group_by(taskhelp_c19) %>% 
+                count %>% mutate(taskhelp_c19 = factor(taskhelp_c19, levels = c('About the same',
+                                                                                'More often','Less often')))%>%
+                na.omit() %>% 
+                ggplot(aes(y = n/sum(n), x = taskhelp_c19)) + geom_col(fill = "lightpink")+ 
+                labs(y = "Percentage")+
+                scale_y_continuous(labels = scales::percent)
+            subplot(g1, g2) %>% layout(width = 1400,
+                                       yaxis = list (title = "Percentage"),
+                                       title = "NEED HELP ON TASKS before and after Covid-19")}
+        else if (input$count == 3){
+            g1 <- mentHeal %>% group_by(rlthappy) %>% 
+                count %>% mutate(rlthappy = factor(rlthappy, levels = c('1 very unhappy','2',
+                                                                        '3','4 neither happy or unhappy','5','6','7 very happy')))%>% na.omit %>% 
+                ggplot(aes(y = n/sum(n), x = rlthappy)) + geom_col(fill = "lightsalmon")+ 
+                labs(y = "Percentage")+
+                scale_y_continuous(labels = scales::percent)
+            g2 <- mentHeal %>% group_by(rlthappy_c19) %>% 
+                count %>% mutate(rlthappy_c19 = factor(rlthappy_c19, levels = 
+                                                           c('A lot worse','A little worse',
+                                                             'A little better','A lot better')))%>%
+                na.omit() %>% 
+                ggplot(aes(y = n/sum(n), x = rlthappy_c19)) + geom_col(fill = "lightpink")+ 
+                labs(y = "Percentage")+
+                scale_y_continuous(labels = scales::percent)
+            subplot(g1, g2) %>% layout(width = 1400,
+                                       yaxis = list (title = "Percentage"),
+                                       title = "RELATION HAPPINESS before and after Covid-19") }
+        else if (input$count == 4){
+            g1 <- mentHeal%>% group_by(support) %>% 
+                count %>% 
+                mutate(support = replace(support, support == 'No, have not been able to get or find support', "Need support, can't find any")) %>% 
+                mutate(support = 
+                           factor(support, levels = 
+                                      c('Yes',"Need support, can't find any"
+                                        ,'No, have not needed support'
+                                      )))%>%
+                na.omit %>% 
+                ggplot(aes(y = n/sum(n), x = support)) + geom_col(fill = "lightsalmon")+ 
+                labs(y = "Percentage")+
+                scale_y_continuous(labels = scales::percent)
+            g2 <- mentHeal %>% group_by(support_c19) %>% 
+                count %>% mutate(support_c19 = factor(support_c19, levels = c('About the same',
+                                                                                'More often','Less often')))%>%
+                na.omit() %>% 
+                ggplot(aes(y = n/sum(n), x = support_c19)) + geom_col(fill = "lightpink")+ 
+                labs(y = "Percentage")+
+                scale_y_continuous(labels = scales::percent)
+            subplot(g1, g2) %>% layout(width = 1400,
+                                       yaxis = list (title = "Percentage"),
+                                       title = "NEED EMOTIONAL SUPPORT before and after Covid-19")}
+        else if (input$count == 5){
+            g1 <- mentHeal %>% group_by(mntlhlth) %>% 
+                count %>% mutate(mntlhlth = factor(mntlhlth, 
+                                                    levels = c('poor','fair',
+                                                               'good','very good',
+                                                               'excellent'))) %>% 
+                na.omit() %>% 
+                ggplot(aes(y = n/sum(n), x = mntlhlth)) + geom_col(fill = "lightsalmon") 
+            g2 <- mentHeal %>% group_by(mntlhlth_c19) %>% 
+                count %>% mutate(mntlhlth_c19 = factor(mntlhlth_c19, 
+                                                       levels = c('Worse','About the same',
+                                                                  'Better'))) %>% 
+                na.omit() %>% 
+                ggplot(aes(y = n/sum(n), x = mntlhlth_c19)) + geom_col(fill = "lightpink") + 
+                labs(y = "Percentage")+
+                scale_y_continuous(labels = scales::percent)
+            subplot(g1, g2) %>% layout(width = 1400,
+                                       yaxis = list (title = "Percentage"),
+                                       title = "MENTAL HEALTH before and after Covid-19")
+        }
+        else if (input$count == 6){
+            g1 <- mentHeal %>% group_by(physact) %>% 
+                count %>% mutate(physact = factor(physact, 
+                                                   levels = c('never',
+                                                              'less than 1 time per month',
+                                                              '1 - 3 times per month',
+                                                              '1 - 2 times per week',
+                                                              '3 or 4 times per week',
+                                                              '5 or more times per week'))) %>% 
+                na.omit() %>% 
+                ggplot(aes(y = n/sum(n), x = physact)) + geom_col(fill = "lightsalmon") 
+            
+            g2 <- mentHeal %>% group_by(physact_c19) %>% 
+                count %>% mutate(physact_c19 = factor(physact_c19,levels = 
+                                                          c('Less','About the same','More'))) %>% 
+                na.omit() %>% 
+                ggplot(aes(y = n/sum(n), x = physact_c19)) + geom_col(fill = "lightpink") 
+            subplot(g1, g2) %>% layout(width = 1400,
+                                       yaxis = list (title = "Percentage"),
+                                       title = "PHYSICAL ACTIVITIES before and after Covid-19")
+        }
+        else if (input$count == 7){
+            g1 <- mentHeal %>% group_by(rested) %>% 
+                count %>% mutate(rested = factor(rested,levels = 
+                                                      c('never','rarely','sometimes',
+                                                        'most of the time'))) %>% 
+                na.omit() %>% 
+                ggplot(aes(y = n/sum(n), x = rested)) + geom_col(fill = "lightsalmon") 
+            g2 <- mentHeal %>% group_by(rested_c19) %>% 
+                count %>% mutate(rested_c19 = factor(rested_c19,levels = 
+                                                         c('Less','About the same','More'))) %>% 
+                na.omit() %>% 
+                ggplot(aes(y = n/sum(n), x = rested_c19)) + geom_col(fill = "lightpink") 
+            subplot(g1, g2) %>% layout(width = 1400,
+                                       yaxis = list (title = "Percentage"),
+                                       title = "REST TIME before and after Covid-19")
+        }
+        else if (input$count == 8){
+            g1 <- mentHeal%>% group_by(alcohol) %>% 
+                count %>% 
+                mutate(alcohol = 
+                           factor(alcohol, levels = c('0 (none or < 1/wk)',
+                                                      '1','2','3','4 ','5','6','7 (every day)')))%>%
+                na.omit %>% 
+                ggplot(aes(y = n/sum(n), x = alcohol)) + geom_col(fill = "lightsalmon") 
+            
+            g2 <- mentHeal %>% group_by(alcohol_c19) %>% 
+                count %>% mutate(alcohol_c19 = factor(alcohol_c19,levels = 
+                                                          c('Less','About the same','More'))) %>% 
+                na.omit() %>% 
+                ggplot(aes(y = n/sum(n), x = alcohol_c19)) + geom_col(fill = "lightpink") 
+            subplot(g1, g2) %>% layout(width = 1400,
+                                       yaxis = list (title = "Percentage"),
+                                       title = "ALCOHOL COMSUMPTION before and after Covid-19")
+        }
+        else if (input$count == 9){
+            g1 <- mentHeal%>% group_by(smoking) %>% 
+                count %>% 
+                mutate(smoking = map(smoking,as.integer))%>%unnest%>%arrange(smoking)%>%
+                filter(smoking <60) %>% 
+                mutate(smoking= factor(smoking)) %>% 
+                na.omit %>% ggplot(aes(y = n/sum(n), x = smoking)) + geom_col(fill = "lightsalmon") 
+            
+            g2 <- mentHeal %>% group_by(smoking_c19) %>% 
+                count %>% mutate(smoking_c19 = factor(smoking_c19,levels = 
+                                                          c('Less','About the same','More'))) %>% 
+                na.omit() %>% 
+                ggplot(aes(y = n/sum(n), x = smoking_c19)) + geom_col(fill = "lightpink") 
+            subplot(g1, g2) %>% layout(width = 1400,
+                                       yaxis = list (title = "Percentage"),
+                                       title = "TABACCO COMSUMPUTION before and after Covid-19")
+        }
+    })
 })
 
 
