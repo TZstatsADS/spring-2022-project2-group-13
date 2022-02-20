@@ -33,6 +33,7 @@ library(tidyverse)
 library(albersusa) 
 library(lubridate)
 library(googleVis)
+library(plotly)
 
 shinyServer(function(input, output) {
     setwd('/Users/users/Documents/GitHub/spring-2022-project2-group-13')
