@@ -13,6 +13,7 @@ library(albersusa)
 library(leaflet)
 library(lubridate)
 library(googleVis)
+library(plotly)
 
 
 
@@ -102,23 +103,30 @@ shinyUI(dashboardPage(
       
       
       tabItem(tabName = "Interac_plot",
-              box(width=6,
-                  h4("The bar chart below shows that Brooklyn and Queens have the most positive antibody cases."),
-                  h4("Please click on the select box to see more specific distribution by borough."),
+              box(width=20,
+                  h4("This bar plot shows the percentage of people in different aspect"),
+                  h4("Please click on the select box to see more specific distribution by issues."),
+                  h4("The left bar plot is the percentage before the beginning of Pandemic"),
+                  h4('The right part is the percentage after the Pandemic'),
                   br(),
                   
                   
                   fluidPage(
                     sidebarLayout(
-                      sidebarPanel(
+                      sidebarPanel(width = 12,
                         
                         selectInput("count", 
-                                    label = "Antibody by Borough in Bar Plot",
-                                    choices = c("Number of Positive People" = 1,
-                                                "Number of People Tested" = 2,  
-                                                "Percentage of Positive Cases" = 3,
-                                                "Test Rate" = 4), 
-                                    selected = "Number of Positive People")),
+                                    label = "Mental Health Issues",
+                                    choices = c("Physical Health" = 1,
+                                                "Halp on Task" = 2,  
+                                                "Relation Happiness" = 3,
+                                                "Emotional Support" = 4,
+                                                "Mental Health" = 5,
+                                                "Physical activity" = 6,
+                                                "Rest time" = 7,
+                                                "Alcohol Comsumption" = 8,
+                                                "Tabacco Comsumption" = 9), 
+                                    selected = "Physical Health")),
                       mainPanel(
                         plotlyOutput("bar_plt")
                       ))
