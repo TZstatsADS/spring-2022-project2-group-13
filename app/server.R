@@ -378,7 +378,7 @@ shinyServer(function(input, output) {
     })
     
     # Interactive plot
-    mentHeal <- read.csv("mentalHealth.csv")
+    mentHeal <- read.csv("data/mentalHealth.csv")
     output$bar_plt <- renderPlotly({
         if (input$count == 1){
             g1 <- mentHeal %>% group_by(physhlth) %>% 
@@ -397,7 +397,8 @@ shinyServer(function(input, output) {
                 ggplot(aes(y = n/sum(n), x = physhlth_c19)) + geom_col(fill = "lightpink") + 
                 labs(y = "Percentage")+
                 scale_y_continuous(labels = scales::percent)
-            subplot(g1, g2) %>% layout(width = 1400,
+            
+            subplot(g1, g2) %>% layout(ncol=2,margin = 0.9,wspace = 0.2,
                                        yaxis = list (title = "Percentage"),
                                        title = "PHYSICAL HEALTH before and after Covid-19")}
         else if (input$count == 2){
@@ -419,7 +420,7 @@ shinyServer(function(input, output) {
                 ggplot(aes(y = n/sum(n), x = taskhelp_c19)) + geom_col(fill = "lightpink")+ 
                 labs(y = "Percentage")+
                 scale_y_continuous(labels = scales::percent)
-            subplot(g1, g2) %>% layout(width = 1400,
+            subplot(g1, g2) %>% layout(ncol=2,margin = 0.9,wspace = 0.2,
                                        yaxis = list (title = "Percentage"),
                                        title = "NEED HELP ON TASKS before and after Covid-19")}
         else if (input$count == 3){
@@ -437,7 +438,7 @@ shinyServer(function(input, output) {
                 ggplot(aes(y = n/sum(n), x = rlthappy_c19)) + geom_col(fill = "lightpink")+ 
                 labs(y = "Percentage")+
                 scale_y_continuous(labels = scales::percent)
-            subplot(g1, g2) %>% layout(width = 1400,
+            subplot(g1, g2) %>% layout(ncol=2,margin = 0.9,wspace = 0.2,
                                        yaxis = list (title = "Percentage"),
                                        title = "RELATION HAPPINESS before and after Covid-19") }
         else if (input$count == 4){
@@ -460,7 +461,7 @@ shinyServer(function(input, output) {
                 ggplot(aes(y = n/sum(n), x = support_c19)) + geom_col(fill = "lightpink")+ 
                 labs(y = "Percentage")+
                 scale_y_continuous(labels = scales::percent)
-            subplot(g1, g2) %>% layout(width = 1400,
+            subplot(g1, g2) %>% layout(ncol=2,margin = 0.9,wspace = 0.2,
                                        yaxis = list (title = "Percentage"),
                                        title = "NEED EMOTIONAL SUPPORT before and after Covid-19")}
         else if (input$count == 5){
@@ -479,7 +480,7 @@ shinyServer(function(input, output) {
                 ggplot(aes(y = n/sum(n), x = mntlhlth_c19)) + geom_col(fill = "lightpink") + 
                 labs(y = "Percentage")+
                 scale_y_continuous(labels = scales::percent)
-            subplot(g1, g2) %>% layout(width = 1400,
+            subplot(g1, g2) %>% layout(ncol=2,margin = 0.9,wspace = 0.2,
                                        yaxis = list (title = "Percentage"),
                                        title = "MENTAL HEALTH before and after Covid-19")
         }
@@ -500,7 +501,7 @@ shinyServer(function(input, output) {
                                                           c('Less','About the same','More'))) %>% 
                 na.omit() %>% 
                 ggplot(aes(y = n/sum(n), x = physact_c19)) + geom_col(fill = "lightpink") 
-            subplot(g1, g2) %>% layout(width = 1400,
+            subplot(g1, g2) %>% layout(ncol=2,margin = 0.9,wspace = 0.2,
                                        yaxis = list (title = "Percentage"),
                                        title = "PHYSICAL ACTIVITIES before and after Covid-19")
         }
@@ -516,7 +517,7 @@ shinyServer(function(input, output) {
                                                          c('Less','About the same','More'))) %>% 
                 na.omit() %>% 
                 ggplot(aes(y = n/sum(n), x = rested_c19)) + geom_col(fill = "lightpink") 
-            subplot(g1, g2) %>% layout(width = 1400,
+            subplot(g1, g2) %>% layout(ncol=2,margin = 0.9,wspace = 0.2,
                                        yaxis = list (title = "Percentage"),
                                        title = "REST TIME before and after Covid-19")
         }
@@ -534,7 +535,7 @@ shinyServer(function(input, output) {
                                                           c('Less','About the same','More'))) %>% 
                 na.omit() %>% 
                 ggplot(aes(y = n/sum(n), x = alcohol_c19)) + geom_col(fill = "lightpink") 
-            subplot(g1, g2) %>% layout(width = 1400,
+            subplot(g1, g2) %>% layout(ncol=2,margin = 0.9,wspace = 0.2,
                                        yaxis = list (title = "Percentage"),
                                        title = "ALCOHOL COMSUMPTION before and after Covid-19")
         }
@@ -551,7 +552,7 @@ shinyServer(function(input, output) {
                                                           c('Less','About the same','More'))) %>% 
                 na.omit() %>% 
                 ggplot(aes(y = n/sum(n), x = smoking_c19)) + geom_col(fill = "lightpink") 
-            subplot(g1, g2) %>% layout(width = 1400,
+            subplot(g1, g2) %>% layout(ncol=2,margin = 0.9,wspace = 0.2,
                                        yaxis = list (title = "Percentage"),
                                        title = "TABACCO COMSUMPUTION before and after Covid-19")
         }

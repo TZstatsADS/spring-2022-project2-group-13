@@ -15,7 +15,7 @@ library(lubridate)
 library(googleVis)
 library(plotly)
 
-
+linebreaks <- function(n){HTML(strrep(br(), n))}
 
 # Define UI for application that draws a histogram
 shinyUI(dashboardPage(
@@ -32,6 +32,7 @@ shinyUI(dashboardPage(
                menuSubItem("Dig by yourself",tabName = "b")),
       menuItem("Analysis", tabName = "Analysis", icon = icon("chart-bar"),
                startExpanded = TRUE,
+               menuSubItem("Mental Health", tabName = "Interac_plot"),
                menuSubItem("Covid New Case", tabName = "New"),
                menuSubItem("NYC transportation",tabName = "both"),
                menuSubItem("Only Subways",tabName = "subway"),
@@ -42,8 +43,33 @@ shinyUI(dashboardPage(
     dashboardBody(
     tabItems(
         tabItem(tabName = "Home",
-                h2("To be continued")
-        ),
+                tags$img(src = "https://richardkleincpa.com/wp-content/uploads/2014/01/new-york-city-street-wallpaper-copy.jpg",
+                         style = 'position: absolute; opacity: 0.4;'),
+                fluidPage(
+                  fluidRow(width = 20, height=140,
+                           linebreaks(5),
+                           h1(style = "text-align: center; font-size = 70px;color:black",strong('Mental Health During the COVID-19 Pandemic')),
+                           br(),
+                           tags$blockquote(h2(style = "text-align: justify; font-size = 35px;color:#8f5dff",
+                                              em('One in five'))),
+                           tags$blockquote(h2(style = "text-align: justify; font-size = 35px;color:black",' New Yorkers experiences mental illness in a given year.')),
+                           br(),
+                           tags$blockquote(h2(style = "text-align: justify; font-size = 35px;color:#8f5dff",
+                                              em('Hundreds of thousands'))),
+                           tags$blockquote(h2(style = "text-align: justify; font-size = 35px;color:black",'of these New Yorkers are not connected to care.')),
+                           hr(),
+                           tags$blockquote(h2(style = "text-align: justify; font-size = 35px;color:black",'We are looking toward a city
+                                              where more New Yorkers might be affacted by Covid-19 on mental health. 
+                                              We are doing this by analyzing their job status and income status, 
+                                              which are among the factors that may lead to mental problems. Similarly, 
+                                              the use of drugs can also reflect mental state of citizens. Finally, we examined how older adults may 
+                                              have changed their frequency of contact with others via various mode since the pandemic started, 
+                                              and how these choices may be impacting their mental health by using data from the National Social Life, 
+                                              Health and Aging Project (NSHAP).
+                                              These key analysis might lead to some interesting insights.')),
+                           hr(),
+                           linebreaks(30)
+                  ))),
         
         tabItem(tabName = "a", 
                 box(width=12,
@@ -103,6 +129,7 @@ shinyUI(dashboardPage(
       
       
       tabItem(tabName = "Interac_plot",
+              fluidPage(
               box(width=20,
                   h4("This bar plot shows the percentage of people in different aspect"),
                   h4("Please click on the select box to see more specific distribution by issues."),
@@ -111,7 +138,7 @@ shinyUI(dashboardPage(
                   br(),
                   
                   
-                  fluidPage(
+                  
                     sidebarLayout(
                       sidebarPanel(width = 12,
                         
@@ -130,24 +157,11 @@ shinyUI(dashboardPage(
                       mainPanel(
                         plotlyOutput("bar_plt")
                       ))
-                  )
+                  
                   
               ),
               
-              box(
-                width=6,
-                h4("Please click on the select box to see more specific distribution of positive antibody tests number & rate."),
-                br(),
-                
-                mainPanel(
-                  fluidRow(
-                    tabsetPanel(id = "tpanel",
-                                type = "tabs",
-                                tabPanel("number of test positive", plotlyOutput("plot1")),
-                                tabPanel("percent of test positive", plotlyOutput("plot2")))
-                  )
-                ))
-      ),
+      )),
       
       tabItem(tabName = "subway", 
               fluidRow(htmlOutput("ggv_timeline_subway"), width=50, height=700)),
