@@ -37,7 +37,8 @@ shinyUI(dashboardPage(
                menuSubItem("Covid New Case", tabName = "New"),
                menuSubItem("NYC transportation",tabName = "both"),
                menuSubItem("Only Subways",tabName = "subway"),
-               menuSubItem("Only Buses", tabName = "bus"))
+               menuSubItem("Only Buses", tabName = "bus"),
+               menuSubItem("job",tabName = "job"))
           )
   ),
   
@@ -241,7 +242,20 @@ shinyUI(dashboardPage(
     tabItem(tabName = 'both',
             fluidRow(htmlOutput("ggv_timeline"), width=50, height=700)),
     tabItem(tabName = "New",
-            fluidRow(htmlOutput("ggv_timeline_new"), width=50, height=700))
+            fluidRow(htmlOutput("ggv_timeline_new"), width=50, height=700)),
+    
+    tabItem(tabName = "job",
+            #sidebarLayout(
+            #  sidebarPanel(
+            #   selectInput("unemployment", "income", c("unemployment", "income"))
+            # ),
+            fluidPage(
+            mainPanel(
+              highchartOutput("case",width = "150%",height = "400px"),
+              highchartOutput("unemployment_rate",width = "160%",height = "400px"),
+              highchartOutput("income",width = "160%",height = "400px")
+            ))
+    )
 ))
 ))
 
