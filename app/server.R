@@ -588,7 +588,7 @@ shinyServer(function(input, output) {
         hc_exporting(enabled = TRUE)
     })
     
-    unemployment_rate <-read.csv("file.csv")
+    unemployment_rate <-read.csv("unemployment.csv")
     unemployment_rate$Label <-as.Date(paste(unemployment_rate$Label,"01",sep=" "),format="%Y %b %d")
     output$unemployment_rate <- renderHighchart({
       hchart(unemployment_rate, "line", hcaes(x = Label, y = Value, group = 1))%>%
