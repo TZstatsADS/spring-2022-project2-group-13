@@ -33,6 +33,7 @@ shinyUI(dashboardPage(
       menuItem("Analysis", tabName = "Analysis", icon = icon("chart-bar"),
                startExpanded = TRUE,
                menuSubItem("Mental Health", tabName = "Interac_plot"),
+               menuSubItem("Social Methods", tabName = "Interac_plot1"),
                menuSubItem("Covid New Case", tabName = "New"),
                menuSubItem("NYC transportation",tabName = "both"),
                menuSubItem("Only Subways",tabName = "subway"),
@@ -153,7 +154,8 @@ shinyUI(dashboardPage(
                                                 "Rest time" = 7,
                                                 "Alcohol Comsumption" = 8,
                                                 "Tabacco Comsumption" = 9), 
-                                    selected = "Physical Health")),
+                                    selected = "Physical Health")
+                        ),
                       mainPanel(
                         plotlyOutput("bar_plt")
                       ))
@@ -162,6 +164,44 @@ shinyUI(dashboardPage(
               ),
               
       )),
+      
+      
+      tabItem(tabName = "Interac_plot1",
+              fluidPage(
+                box(width=20,
+                    h4("This bar plot shows the percentage of people in different aspect"),
+                    h4("Please click on the select box to see more specific distribution by issues."),
+                    h4("The left bar plot is the percentage before the beginning of Pandemic"),
+                    h4('The right part is the percentage after the Pandemic'),
+                    br(),
+                    
+                    
+                    
+                    sidebarLayout(
+                      sidebarPanel(width = 12,
+                                   
+                                   selectInput("count1", 
+                                               label = "SOCIAL",
+                                               choices = c("Phone call" = 1,
+                                                           "Email" = 2,  
+                                                           "Video call" = 3,
+                                                           "In person meet" = 4), 
+                                               selected = "Physical Health"),
+                                   
+                                   radioButtons("count2", 
+                                                label = HTML('<FONT color="red"><FONT size="5pt">Welcome</FONT></FONT><br> <b>Whom to connect ?</b>'),
+                                                choices = list("Family connection" = 1, "Friends connection" = 2),
+                                                selected = 1,
+                                                inline = T,
+                                                width = "100%")),
+                      mainPanel(
+                        plotlyOutput("bar_plt1")
+                      ))
+                    
+                    
+                ),
+                
+              )),
       
       tabItem(tabName = "subway", 
               fluidRow(htmlOutput("ggv_timeline_subway"), width=50, height=700)),

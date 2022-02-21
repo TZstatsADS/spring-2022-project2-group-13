@@ -557,6 +557,221 @@ shinyServer(function(input, output) {
                                        title = "TABACCO COMSUMPUTION before and after Covid-19")
         }
     })
+    
+    
+    
+    # SOCIAL
+    output$bar_plt1 <- renderPlotly({
+        if (input$count1 == 1 & input$count2 == 1){
+            g1 <- mentHeal %>% group_by(famphn_1) %>% 
+                count %>% 
+                mutate(famphn_1 = 
+                           factor(famphn_1, levels = 
+                                      c('Less than once a week', 'About once a week', 'A few times a week','At least daily', 'Never')))%>%
+                na.omit %>% 
+                ggplot(aes(y = n/sum(n), x = famphn_1)) + geom_col(fill = "lightsalmon")+
+                labs(y = "Percentage")+
+                scale_y_continuous(labels = scales::percent)+
+                theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust=1))
+            
+            g2 <- mentHeal %>% group_by(famphn_2) %>% 
+                count %>% mutate(famphn_2 = factor(famphn_2, levels = c('A lot less often', 'A little more often', 'A little less often',
+                                                                        'About the same', 'A lot more often')))%>%
+                na.omit() %>% 
+                ggplot(aes(y = n/sum(n), x = famphn_2)) + geom_col(fill = "lightpink") + 
+                labs(y = "Percentage")+
+                scale_y_continuous(labels = scales::percent)+
+                theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust=1))
+            
+            subplot(g1, g2) %>% layout(ncol=2,margin = 0.9,wspace = 0.2,
+                                       yaxis = list (title = "Percentage"),
+                                       title = "FREQUENCY of FAMILY PHONE CALL before and after Covid-19")}
+        
+        else if (input$count1 == 2 & input$count2 == 1){
+            g1 <- mentHeal %>% group_by(fameml_1) %>% 
+                count %>% 
+                mutate(fameml_1 = 
+                           factor(fameml_1, levels = 
+                                      c('A few times a week', 'About once a week', 'At least daily',
+                                        'Never', 'Less than once a week')))%>%
+                na.omit %>% 
+                ggplot(aes(y = n/sum(n), x = fameml_1)) + geom_col(fill = "lightsalmon")+
+                labs(y = "Percentage")+
+                scale_y_continuous(labels = scales::percent)+
+                theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust=1))
+            
+            g2 <- mentHeal %>% group_by(fameml_2) %>% 
+                count %>% mutate(fameml_2 = factor(fameml_2, levels = c('About the same', 'A little less often', 'A little more often',
+                                                                        'A lot more often', 'A lot less often')))%>%
+                na.omit() %>% 
+                ggplot(aes(y = n/sum(n), x = fameml_2)) + geom_col(fill = "lightpink") + 
+                labs(y = "Percentage")+
+                scale_y_continuous(labels = scales::percent)+
+                theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust=1))
+            
+            subplot(g1, g2) %>% layout(ncol=2,margin = 0.9,wspace = 0.2,
+                                       yaxis = list (title = "Percentage"),
+                                       title = "FREQUENCY of FAMILY EMAIL before and after Covid-19")}
+        
+        else if (input$count1 == 3 & input$count2 == 1){
+            g1 <- mentHeal %>% group_by(famvid_1) %>% 
+                count %>% 
+                mutate(famvid_1 = 
+                           factor(famvid_1, levels = 
+                                      c('A few times a week', 'Never', 'Less than once a week',
+                                        'At least daily', 'About once a week')))%>%
+                na.omit %>% 
+                ggplot(aes(y = n/sum(n), x = famvid_1)) + geom_col(fill = "lightsalmon")+
+                labs(y = "Percentage")+
+                scale_y_continuous(labels = scales::percent)+
+                theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust=1))
+            
+            g2 <- mentHeal %>% group_by(famvid_2) %>% 
+                count %>% mutate(famvid_2 = factor(famvid_2, levels = c('About the same', 'A lot less often', 'A little more often',
+                                                                        'A lot more often', 'A little less often')))%>%
+                na.omit() %>% 
+                ggplot(aes(y = n/sum(n), x = famvid_2)) + geom_col(fill = "lightpink") + 
+                labs(y = "Percentage")+
+                scale_y_continuous(labels = scales::percent)+
+                theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust=1))
+            
+            subplot(g1, g2) %>% layout(ncol=2,margin = 0.9,wspace = 0.2,
+                                       yaxis = list (title = "Percentage"),
+                                       title = "FREQUENCY of FAMILY VIDEO CALL before and after Covid-19")}
+        
+        else if (input$count1 == 4 & input$count2 == 1){
+            g1 <- mentHeal %>% group_by(faminpers_1) %>% 
+                count %>% 
+                mutate(faminpers_1 = 
+                           factor(faminpers_1, levels = 
+                                      c('A few times a week', 'Never', 'About once a week',
+                                        'Less than once a week', 'At least daily')))%>%
+                na.omit %>% 
+                ggplot(aes(y = n/sum(n), x = faminpers_1)) + geom_col(fill = "lightsalmon")+
+                labs(y = "Percentage")+
+                scale_y_continuous(labels = scales::percent)+
+                theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust=1))
+            
+            g2 <- mentHeal %>% group_by(faminpers_2) %>% 
+                count %>% mutate(faminpers_2 = factor(faminpers_2, levels = c('About the same', 'A lot less often', 'A little less often',
+                                                                              'A little more often', 'A lot more often')))%>%
+                na.omit() %>% 
+                ggplot(aes(y = n/sum(n), x = faminpers_2)) + geom_col(fill = "lightpink") + 
+                labs(y = "Percentage")+
+                scale_y_continuous(labels = scales::percent)+
+                theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust=1))
+            
+            subplot(g1, g2) %>% layout(ncol=2,margin = 0.9,wspace = 0.2,
+                                       yaxis = list (title = "Percentage"),
+                                       title = "FREQUENCY of FAMILY IN PERSON MEET before and after Covid-19")}
+        
+        
+        else if (input$count1 == 1 & input$count2 == 2){
+            g1 <- mentHeal %>% group_by(frdphn_1) %>% 
+                count %>% 
+                mutate(frdphn_1 = 
+                           factor(frdphn_1, levels = 
+                                      c('A few times a week', 'Less than once a week', 'About once a week',
+                                        'Never', 'At least daily')))%>%
+                na.omit %>% 
+                ggplot(aes(y = n/sum(n), x = frdphn_1)) + geom_col(fill = "lightsalmon")+
+                labs(y = "Percentage")+
+                scale_y_continuous(labels = scales::percent)+
+                theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust=1))
+            
+            g2 <- mentHeal %>% group_by(frdphn_2) %>% 
+                count %>% mutate(frdphn_2 = factor(frdphn_2, levels = c('About the same', 'A lot less often', 'A little more often',
+                                                                        'A little less often', 'A lot more often')))%>%
+                na.omit() %>% 
+                ggplot(aes(y = n/sum(n), x = frdphn_2)) + geom_col(fill = "lightpink") + 
+                labs(y = "Percentage")+
+                scale_y_continuous(labels = scales::percent)+
+                theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust=1))
+            
+            subplot(g1, g2) %>% layout(ncol=2,margin = 0.9,wspace = 0.2,
+                                       yaxis = list (title = "Percentage"),
+                                       title = "FREQUENCY of FRIENDS PHONE CALL before and after Covid-19")}
+        
+        else if (input$count1 == 2 & input$count2 == 2){
+            g1 <- mentHeal %>% group_by(frdeml_1) %>% 
+                count %>% 
+                mutate(frdeml_1 = 
+                           factor(frdeml_1, levels = 
+                                      c('A few times a week', 'Less than once a week', 'Never',
+                                        'About once a week', 'At least daily')))%>%
+                na.omit %>% 
+                ggplot(aes(y = n/sum(n), x = frdeml_1)) + geom_col(fill = "lightsalmon")+
+                labs(y = "Percentage")+
+                scale_y_continuous(labels = scales::percent)+
+                theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust=1))
+            
+            g2 <- mentHeal %>% group_by(frdeml_2) %>% 
+                count %>% mutate(frdeml_2 = factor(frdeml_2, levels = c('A little more often', 'About the same', 'A lot less often',
+                                                                        'A little less often', 'A lot more often')))%>%
+                na.omit() %>% 
+                ggplot(aes(y = n/sum(n), x = frdeml_2)) + geom_col(fill = "lightpink") + 
+                labs(y = "Percentage")+
+                scale_y_continuous(labels = scales::percent)+
+                theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust=1))
+            
+            subplot(g1, g2) %>% layout(ncol=2,margin = 0.9,wspace = 0.2,
+                                       yaxis = list (title = "Percentage"),
+                                       title = "FREQUENCY of FRIENDS EMAIL before and after Covid-19")}
+        
+        else if (input$count1 == 3 & input$count2 == 2){
+            g1 <- mentHeal %>% group_by(frdvid_1) %>% 
+                count %>% 
+                mutate(frdvid_1 = 
+                           factor(frdvid_1, levels = 
+                                      c('Less than once a week', 'Never', 'About once a week',
+                                        'A few times a week', 'At least daily')))%>%
+                na.omit %>% 
+                ggplot(aes(y = n/sum(n), x = frdvid_1)) + geom_col(fill = "lightsalmon")+
+                labs(y = "Percentage")+
+                scale_y_continuous(labels = scales::percent)+
+                theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust=1))
+            
+            g2 <- mentHeal %>% group_by(frdvid_2) %>% 
+                count %>% mutate(frdvid_2 = factor(frdvid_2, levels = c('A lot less often', 'About the same', 'A little more often',
+                                                                        'A lot more often',
+                                                                        'A little less often')))%>%
+                na.omit() %>% 
+                ggplot(aes(y = n/sum(n), x = frdvid_2)) + geom_col(fill = "lightpink") + 
+                labs(y = "Percentage")+
+                scale_y_continuous(labels = scales::percent)+
+                theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust=1))
+            
+            subplot(g1, g2) %>% layout(ncol=2,margin = 0.9,wspace = 0.2,
+                                       yaxis = list (title = "Percentage"),
+                                       title = "FREQUENCY of FRIENDS VIDEO CALL before and after Covid-19")}
+        
+        else if (input$count1 == 4 & input$count2 == 2){
+            g1 <- mentHeal %>% group_by(frdinpers_1) %>% 
+                count %>% 
+                mutate(frdinpers_1 = 
+                           factor(frdinpers_1, levels = 
+                                      c('Less than once a week', 'About once a week', 'Never',
+                                        'A few times a week', 'At least daily')))%>%
+                na.omit %>% 
+                ggplot(aes(y = n/sum(n), x = frdinpers_1)) + geom_col(fill = "lightsalmon")+
+                labs(y = "Percentage")+
+                scale_y_continuous(labels = scales::percent)+
+                theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust=1))
+            
+            g2 <- mentHeal %>% group_by(frdinpers_2) %>% 
+                count %>% mutate(frdinpers_2 = factor(frdinpers_2, levels = c('A lot less often', 'About the same', 'A little less often',
+                                                                              'A little more often', 'A lot more often')))%>%
+                na.omit() %>% 
+                ggplot(aes(y = n/sum(n), x = frdinpers_2)) + geom_col(fill = "lightpink") + 
+                labs(y = "Percentage")+
+                scale_y_continuous(labels = scales::percent)+
+                theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust=1))
+            
+            subplot(g1, g2) %>% layout(ncol=2,margin = 0.9,wspace = 0.2,
+                                       yaxis = list (title = "Percentage"),
+                                       title = "FREQUENCY of FRIENDS IN PERSON MEET before and after Covid-19")}
+
+    })
 })
 
 
