@@ -36,7 +36,7 @@ library(googleVis)
 library(plotly)
 
 shinyServer(function(input, output) {
-    setwd('/Users/users/Documents/GitHub/spring-2022-project2-group-13')
+    setwd('D:/5243/2/spring-2022-project2-group-13')
     
 ###map for covid
 
@@ -556,6 +556,74 @@ shinyServer(function(input, output) {
                                        yaxis = list (title = "Percentage"),
                                        title = "TABACCO COMSUMPUTION before and after Covid-19")
         }
+    })
+    
+    
+    #JOB
+    data_by_day <- read.csv("https://raw.githubusercontent.com/nychealth/coronavirus-data/master/trends/data-by-day.csv", stringsAsFactors = FALSE)
+    data_by_day$date_of_interest <-as.Date(data_by_day$date_of_interest, format="%m/%d/%Y")
+    
+    
+    #d <- reactive({
+    #  data_by_day %>%
+    #    filter(count_type %in% input$count_typeInput)
+    #})
+    output$case <-renderHighchart({
+      data_by_day = data_by_day[,c(1,2,5)]%>%
+        tidyr::pivot_longer(
+          cols = -date_of_interest, 
+          names_to = "line_var", 
+          values_to = "value")
+      hchart(data_by_day, "line", hcaes(x = date_of_interest, y = value, group = line_var))%>%
+        hc_chart(zoomType = "x") %>%
+        hc_legend(align = "center", verticalAlign = "bottom",layout = "horizontal") %>%
+        hc_xAxis(title = list(text = "Date"),
+                 labels = list(format = '{value:%b %d %y}')) %>%
+        hc_yAxis(title = list(text = "Count"),
+                 tickInterval = 400,
+                 max = max(data_by_day$value)) %>%
+        hc_title(text = paste0("<b>Covid-19' summary of NYC")) %>%
+        hc_subtitle(text = "Click and drag in the plot area to zoom in on a time span") %>%
+        hc_plotOptions(area = list(lineWidth = 0.5)) %>% 
+        hc_exporting(enabled = TRUE)
+    })
+    
+    unemployment_rate <-read.csv("file.csv")
+    unemployment_rate$Label <-as.Date(paste(unemployment_rate$Label,"01",sep=" "),format="%Y %b %d")
+    output$unemployment_rate <- renderHighchart({
+      hchart(unemployment_rate, "line", hcaes(x = Label, y = Value, group = 1))%>%
+        hc_chart(zoomType = "x") %>%
+        hc_legend(align = "center", verticalAlign = "bottom",layout = "horizontal") %>%
+        hc_xAxis(title = list(text = "Date"),
+                 labels = list(format = '{value:%b %d %y}')) %>%
+        hc_yAxis(title = list(text = "unemployment_rate"),
+                 tickInterval = 5,
+                 max = max(unemployment_rate$Value)) %>%
+        hc_title(text = paste0("<b>unemployment_rate")) %>%
+        hc_subtitle(text = "Click and drag in the plot area to zoom in on a time span") %>%
+        hc_plotOptions(area = list(lineWidth = 0.5)) %>% 
+        hc_exporting(enabled = TRUE)
+    })
+    
+    
+    income <- read.csv("income.csv", skip = 4)
+    income <- income[1,] %>% pivot_longer(cols = contains("20"),
+                                          names_to = "date",
+                                          values_to = "value")
+    output$income <- renderHighchart({
+      hchart(income, "line", hcaes(x = date, y = value, group = 1))%>%
+        hc_chart(zoomType = "x") %>%
+        hc_legend(align = "center", verticalAlign = "bottom",layout = "horizontal") %>%
+        hc_xAxis(title = list(text = "Date"),
+                 labels = list(format = '{value:%b %d %y}')) %>%
+        hc_yAxis(title = list(text = "income"),
+                 tickInterval = 5,
+                 max = max(income$value)) %>%
+        hc_title(text = paste0("<b>income")) %>%
+        hc_subtitle(text = "Click and drag in the plot area to zoom in on a time span") %>%
+        hc_plotOptions(area = list(lineWidth = 0.5)) %>% 
+        hc_exporting(enabled = TRUE)
+      
     })
 })
 
