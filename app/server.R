@@ -389,14 +389,16 @@ shinyServer(function(input, output) {
                 na.omit %>% 
                 ggplot(aes(y = n/sum(n), x = physhlth)) + geom_col(fill = "lightsalmon")+
                 labs(y = "Percentage")+
-                scale_y_continuous(labels = scales::percent)
+                scale_y_continuous(labels = scales::percent)+
+                theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust=1))
             g2 <- mentHeal %>% group_by(physhlth_c19) %>% 
                 count %>% mutate(physhlth_c19 = factor(physhlth_c19, levels = c('About the same',
                                                                                 'Better','Worse')))%>%
                 na.omit() %>% 
                 ggplot(aes(y = n/sum(n), x = physhlth_c19)) + geom_col(fill = "lightpink") + 
                 labs(y = "Percentage")+
-                scale_y_continuous(labels = scales::percent)
+                scale_y_continuous(labels = scales::percent)+
+                theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust=1))
             
             subplot(g1, g2) %>% layout(ncol=2,margin = 0.9,wspace = 0.2,
                                        yaxis = list (title = "Percentage"),
@@ -412,14 +414,16 @@ shinyServer(function(input, output) {
                 na.omit %>% 
                 ggplot(aes(y = n/sum(n), x = taskhelp)) + geom_col(fill = "lightsalmon") + 
                 labs(y = "Percentage")+
-                scale_y_continuous(labels = scales::percent)
+                scale_y_continuous(labels = scales::percent)+
+                theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust=1))
             g2 <- mentHeal %>% group_by(taskhelp_c19) %>% 
                 count %>% mutate(taskhelp_c19 = factor(taskhelp_c19, levels = c('About the same',
                                                                                 'More often','Less often')))%>%
                 na.omit() %>% 
                 ggplot(aes(y = n/sum(n), x = taskhelp_c19)) + geom_col(fill = "lightpink")+ 
                 labs(y = "Percentage")+
-                scale_y_continuous(labels = scales::percent)
+                scale_y_continuous(labels = scales::percent)+
+                theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust=1))
             subplot(g1, g2) %>% layout(ncol=2,margin = 0.9,wspace = 0.2,
                                        yaxis = list (title = "Percentage"),
                                        title = "NEED HELP ON TASKS before and after Covid-19")}
@@ -429,7 +433,8 @@ shinyServer(function(input, output) {
                                                                         '3','4 neither happy or unhappy','5','6','7 very happy')))%>% na.omit %>% 
                 ggplot(aes(y = n/sum(n), x = rlthappy)) + geom_col(fill = "lightsalmon")+ 
                 labs(y = "Percentage")+
-                scale_y_continuous(labels = scales::percent)
+                scale_y_continuous(labels = scales::percent)+
+                theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust=1))
             g2 <- mentHeal %>% group_by(rlthappy_c19) %>% 
                 count %>% mutate(rlthappy_c19 = factor(rlthappy_c19, levels = 
                                                            c('A lot worse','A little worse',
@@ -437,7 +442,8 @@ shinyServer(function(input, output) {
                 na.omit() %>% 
                 ggplot(aes(y = n/sum(n), x = rlthappy_c19)) + geom_col(fill = "lightpink")+ 
                 labs(y = "Percentage")+
-                scale_y_continuous(labels = scales::percent)
+                scale_y_continuous(labels = scales::percent)+
+                theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust=1))
             subplot(g1, g2) %>% layout(ncol=2,margin = 0.9,wspace = 0.2,
                                        yaxis = list (title = "Percentage"),
                                        title = "RELATION HAPPINESS before and after Covid-19") }
@@ -453,14 +459,16 @@ shinyServer(function(input, output) {
                 na.omit %>% 
                 ggplot(aes(y = n/sum(n), x = support)) + geom_col(fill = "lightsalmon")+ 
                 labs(y = "Percentage")+
-                scale_y_continuous(labels = scales::percent)
+                scale_y_continuous(labels = scales::percent)+
+                theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust=1))
             g2 <- mentHeal %>% group_by(support_c19) %>% 
                 count %>% mutate(support_c19 = factor(support_c19, levels = c('About the same',
                                                                                 'More often','Less often')))%>%
                 na.omit() %>% 
                 ggplot(aes(y = n/sum(n), x = support_c19)) + geom_col(fill = "lightpink")+ 
                 labs(y = "Percentage")+
-                scale_y_continuous(labels = scales::percent)
+                scale_y_continuous(labels = scales::percent)+
+                theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust=1))
             subplot(g1, g2) %>% layout(ncol=2,margin = 0.9,wspace = 0.2,
                                        yaxis = list (title = "Percentage"),
                                        title = "NEED EMOTIONAL SUPPORT before and after Covid-19")}
@@ -471,7 +479,8 @@ shinyServer(function(input, output) {
                                                                'good','very good',
                                                                'excellent'))) %>% 
                 na.omit() %>% 
-                ggplot(aes(y = n/sum(n), x = mntlhlth)) + geom_col(fill = "lightsalmon") 
+                ggplot(aes(y = n/sum(n), x = mntlhlth)) + geom_col(fill = "lightsalmon") +
+                theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust=1))
             g2 <- mentHeal %>% group_by(mntlhlth_c19) %>% 
                 count %>% mutate(mntlhlth_c19 = factor(mntlhlth_c19, 
                                                        levels = c('Worse','About the same',
@@ -479,7 +488,8 @@ shinyServer(function(input, output) {
                 na.omit() %>% 
                 ggplot(aes(y = n/sum(n), x = mntlhlth_c19)) + geom_col(fill = "lightpink") + 
                 labs(y = "Percentage")+
-                scale_y_continuous(labels = scales::percent)
+                scale_y_continuous(labels = scales::percent)+
+                theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust=1))
             subplot(g1, g2) %>% layout(ncol=2,margin = 0.9,wspace = 0.2,
                                        yaxis = list (title = "Percentage"),
                                        title = "MENTAL HEALTH before and after Covid-19")
@@ -494,13 +504,15 @@ shinyServer(function(input, output) {
                                                               '3 or 4 times per week',
                                                               '5 or more times per week'))) %>% 
                 na.omit() %>% 
-                ggplot(aes(y = n/sum(n), x = physact)) + geom_col(fill = "lightsalmon") 
+                ggplot(aes(y = n/sum(n), x = physact)) + geom_col(fill = "lightsalmon") +
+                theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust=1))
             
             g2 <- mentHeal %>% group_by(physact_c19) %>% 
                 count %>% mutate(physact_c19 = factor(physact_c19,levels = 
                                                           c('Less','About the same','More'))) %>% 
                 na.omit() %>% 
-                ggplot(aes(y = n/sum(n), x = physact_c19)) + geom_col(fill = "lightpink") 
+                ggplot(aes(y = n/sum(n), x = physact_c19)) + geom_col(fill = "lightpink") +
+                theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust=1))
             subplot(g1, g2) %>% layout(ncol=2,margin = 0.9,wspace = 0.2,
                                        yaxis = list (title = "Percentage"),
                                        title = "PHYSICAL ACTIVITIES before and after Covid-19")
@@ -511,12 +523,14 @@ shinyServer(function(input, output) {
                                                       c('never','rarely','sometimes',
                                                         'most of the time'))) %>% 
                 na.omit() %>% 
-                ggplot(aes(y = n/sum(n), x = rested)) + geom_col(fill = "lightsalmon") 
+                ggplot(aes(y = n/sum(n), x = rested)) + geom_col(fill = "lightsalmon") +
+                theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust=1))
             g2 <- mentHeal %>% group_by(rested_c19) %>% 
                 count %>% mutate(rested_c19 = factor(rested_c19,levels = 
                                                          c('Less','About the same','More'))) %>% 
                 na.omit() %>% 
-                ggplot(aes(y = n/sum(n), x = rested_c19)) + geom_col(fill = "lightpink") 
+                ggplot(aes(y = n/sum(n), x = rested_c19)) + geom_col(fill = "lightpink")+
+                theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust=1)) 
             subplot(g1, g2) %>% layout(ncol=2,margin = 0.9,wspace = 0.2,
                                        yaxis = list (title = "Percentage"),
                                        title = "REST TIME before and after Covid-19")
@@ -528,13 +542,15 @@ shinyServer(function(input, output) {
                            factor(alcohol, levels = c('0 (none or < 1/wk)',
                                                       '1','2','3','4 ','5','6','7 (every day)')))%>%
                 na.omit %>% 
-                ggplot(aes(y = n/sum(n), x = alcohol)) + geom_col(fill = "lightsalmon") 
+                ggplot(aes(y = n/sum(n), x = alcohol)) + geom_col(fill = "lightsalmon") +
+                theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust=1))
             
             g2 <- mentHeal %>% group_by(alcohol_c19) %>% 
                 count %>% mutate(alcohol_c19 = factor(alcohol_c19,levels = 
                                                           c('Less','About the same','More'))) %>% 
                 na.omit() %>% 
-                ggplot(aes(y = n/sum(n), x = alcohol_c19)) + geom_col(fill = "lightpink") 
+                ggplot(aes(y = n/sum(n), x = alcohol_c19)) + geom_col(fill = "lightpink") +
+                theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust=1))
             subplot(g1, g2) %>% layout(ncol=2,margin = 0.9,wspace = 0.2,
                                        yaxis = list (title = "Percentage"),
                                        title = "ALCOHOL COMSUMPTION before and after Covid-19")
@@ -545,13 +561,15 @@ shinyServer(function(input, output) {
                 mutate(smoking = map(smoking,as.integer))%>%unnest%>%arrange(smoking)%>%
                 filter(smoking <60) %>% 
                 mutate(smoking= factor(smoking)) %>% 
-                na.omit %>% ggplot(aes(y = n/sum(n), x = smoking)) + geom_col(fill = "lightsalmon") 
+                na.omit %>% ggplot(aes(y = n/sum(n), x = smoking)) + geom_col(fill = "lightsalmon") +
+                theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust=1))
             
             g2 <- mentHeal %>% group_by(smoking_c19) %>% 
                 count %>% mutate(smoking_c19 = factor(smoking_c19,levels = 
                                                           c('Less','About the same','More'))) %>% 
                 na.omit() %>% 
-                ggplot(aes(y = n/sum(n), x = smoking_c19)) + geom_col(fill = "lightpink") 
+                ggplot(aes(y = n/sum(n), x = smoking_c19)) + geom_col(fill = "lightpink") +
+                theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust=1))
             subplot(g1, g2) %>% layout(ncol=2,margin = 0.9,wspace = 0.2,
                                        yaxis = list (title = "Percentage"),
                                        title = "TABACCO COMSUMPUTION before and after Covid-19")
