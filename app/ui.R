@@ -152,10 +152,10 @@ shinyUI(dashboardPage(
           actionButton("textile","Textile Drop-Off Locations",icon=icon("tshirt",  lib = "font-awesome"),style="color: #fff; background-color: #94a4db; border-color: #94a4db"),
           actionButton("job","Directory Of Job Centers",icon=icon("briefcase",  lib = "font-awesome"),style="color: #fff; background-color: #94a4db; border-color: #94a4db"),
           br(),
-          p("The plot won't update until the button is clicked.",
-            " Without the use of ", code("isolate()"),
-            " in server.R, the plot would update whenever the slider",
-            " changes."),
+          h5('Data source:',
+             tags$a(href="https://opendata.cityofnewyork.us/", 
+                    "New York City Open Data")
+             ),
           leafletOutput("mymap", width="100%", height=800))
       ),
       
@@ -188,7 +188,11 @@ shinyUI(dashboardPage(
                                     selected = "Physical Health")
                         ),
                       mainPanel(
-                        plotlyOutput("bar_plt")
+                        plotlyOutput("bar_plt"),
+                        br(),
+                        h5('Data source:',
+                           tags$a(href="https://www.icpsr.umich.edu/web/ICPSR/studies/36873/summary", 
+                                  "Mental Health Questionaire Data"))
                       ))
                   
                   
@@ -226,7 +230,11 @@ shinyUI(dashboardPage(
                                                 inline = T,
                                                 width = "100%")),
                       mainPanel(
-                        plotlyOutput("bar_plt1")
+                        plotlyOutput("bar_plt1"),
+                        br(),
+                        h5('Data source:',
+                           tags$a(href="https://www.icpsr.umich.edu/web/ICPSR/studies/36873/summary", 
+                                  "Mental Health Questionaire Data"))
                       ))
                     
                     
@@ -269,7 +277,12 @@ shinyUI(dashboardPage(
               highchartOutput("case",width = "150%",height = "400px"),
               highchartOutput("unemployment_rate",width = "160%",height = "400px"),
               highchartOutput("income",width = "160%",height = "400px")
-            ))
+            ),
+            br(),
+            h5('Data source:',
+               tags$a(href="https://raw.githubusercontent.com/nychealth/coronavirus-data/master/trends/data-by-day.csv", 
+                      "New York City Job Data"))
+            )
     )
 ))
 ))
