@@ -334,6 +334,7 @@ shinyServer(function(input, output) {
         
     })
     output$ggv_timeline = renderGvis({
+        if(input$count3 == 3){
         gvisAnnotationChart(g_timeline_both() ,
                             datevar="Date",
                             numvar="value",
@@ -341,7 +342,25 @@ shinyServer(function(input, output) {
                             options=list(
                                 title= "Bus",
                                 width= '95%',
-                                height= 500))
+                                height= 500))}
+        else if(input$count3 == 1){
+            gvisAnnotationChart(g_timeline_bus() ,
+                                datevar="Date",
+                                numvar="ridership",
+                                options=list(
+                                    title= "Bus",
+                                    width= '95%',
+                                    height= 500))
+        }
+        else if(input$count3 == 2){
+            gvisAnnotationChart(g_timeline_subway() ,
+                                datevar="Date",
+                                numvar="ridership",
+                                options=list(
+                                    title= "Subway",
+                                    width= '95%',
+                                    height= 500))
+        }
         
     })
     

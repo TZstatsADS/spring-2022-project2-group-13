@@ -32,13 +32,14 @@ shinyUI(dashboardPage(
                menuSubItem("Dig by yourself",tabName = "b")),
       menuItem("Analysis", tabName = "Analysis", icon = icon("chart-bar"),
                startExpanded = TRUE,
+               menuSubItem("job",tabName = "job"),
                menuSubItem("Social Networking", tabName = "Interac_plot1"),
                menuSubItem("Mental Health Issues", tabName = "Interac_plot"),
                menuSubItem("Covid New Case", tabName = "New"),
                menuSubItem("NYC transportation",tabName = "both"),
                menuSubItem("Only Subways",tabName = "subway"),
-               menuSubItem("Only Buses", tabName = "bus"),
-               menuSubItem("job",tabName = "job"))
+               menuSubItem("Only Buses", tabName = "bus")
+          )
           )
   ),
   
@@ -240,7 +241,21 @@ shinyUI(dashboardPage(
               fluidRow(htmlOutput("ggv_timeline_bus"), width=50, height=700)
     ),
     tabItem(tabName = 'both',
-            fluidRow(htmlOutput("ggv_timeline"), width=50, height=700)),
+            # sidebarLayout(
+              # sidebarPanel(width = 12,
+                           # 
+                           # radioButtons("count3", 
+                           #              label = HTML('<FONT color="red"><FONT size="5pt">Welcome</FONT></FONT><br> <b>Whom to connect ?</b>'),
+                           #              choices = list("bus only" = 1, "subway only" = 2,"bus & subway"=3),
+                           #              selected = 3,
+                           #              inline = T,
+                           #              width = "100%")),
+              # mainPanel(
+              #   htmlOutput("ggv_timeline")
+              # ))
+            fluidRow(htmlOutput("ggv_timeline"), width=50, height=700)
+            ),
+    
     tabItem(tabName = "New",
             fluidRow(htmlOutput("ggv_timeline_new"), width=50, height=700)),
     
