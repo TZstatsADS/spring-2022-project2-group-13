@@ -44,6 +44,35 @@ shinyUI(dashboardPage(
     dashboardBody(
     tabItems(
         tabItem(tabName = "Home",
+                tags$head(
+                  tags$style(HTML("
+      @import url('https://fonts.googleapis.com/css?family=Tangerine');
+
+      h1 {
+        font-family: 'Lucida Console', Courier, monospace;
+        font-weight: 500;
+        line-height: 1.1;
+        color: #48ca3b;
+        text-shadow: 4px 4px 4px #aaa
+      }
+        h2 {
+        font-family: 'Lucida Console', Courier, monospace;
+        font-weight: 500;
+        line-height: 1.1;
+        color: #48ca3b;
+        text-shadow: 4px 4px 4px #aaa
+      }
+
+      h3 {
+        font-family: 'Lucida Console', Courier, monospace;
+        font-weight: 500;
+        line-height: 2.5;
+        color: #48ca3b;
+        text-shadow: 4px 4px 4px #aaa
+      }
+
+    "))
+                ),
                 tags$img(src = "https://richardkleincpa.com/wp-content/uploads/2014/01/new-york-city-street-wallpaper-copy.jpg",
                          style = 'position: absolute; opacity: 0.4;'),
                 fluidPage(
@@ -59,7 +88,7 @@ shinyUI(dashboardPage(
                                               em('Hundreds of thousands'))),
                            tags$blockquote(h2(style = "text-align: justify; font-size = 35px;color:black",'of these New Yorkers are not connected to care.')),
                            hr(),
-                           tags$blockquote(h2(style = "text-align: justify; font-size = 35px;color:black",'We are looking toward a city
+                           tags$blockquote(h3(style = "text-align: justify; font-size = 35px;color:black",'We are looking toward a city
                                               where more New Yorkers might be affacted by Covid-19 on mental health. 
                                               We are doing this by analyzing their job status and income status, 
                                               which are among the factors that may lead to mental problems. Similarly, 
