@@ -40,8 +40,8 @@ library(highcharter)
 
 shinyServer(function(input, output) {
     # setwd('D:/5243/2/spring-2022-project2-group-13')
-    setwd('C:/Users/Rachel/Desktop/new')
-    # setwd('/Users/master/github_repo/spring-2022-project2-group-13')
+    # setwd('C:/Users/Rachel/Desktop/new')
+    setwd('/Users/users/Documents/GitHub/spring-2022-project2-group-13')
     
 ###map for covid
 

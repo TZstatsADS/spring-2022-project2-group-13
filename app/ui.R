@@ -71,7 +71,7 @@ shinyUI(dashboardPage(
       h3 {
         font-family: 'Lucida Console', Courier, monospace;
         font-weight: 500;
-        line-height: 2.5;
+        line-height: 1.7;
         color: #48ca3b;
         text-shadow: 4px 4px 4px #aaa
       }
@@ -108,7 +108,7 @@ shinyUI(dashboardPage(
         
         tabItem(tabName = "a", 
                 box(width=12,
-                    h2('Map - Covid Cases per US State'),
+                    h2(style = "text-align: justify; font-size = 70px;color:black",'Map - Covid Cases per US State'),
                     h4("The map shows the cumulative and death cases per state in US."),
                     h4("Please click on the select box to explore by yourself."),
                     br(),
@@ -136,7 +136,7 @@ shinyUI(dashboardPage(
                   
                   # Show map
                   mainPanel(
-                    h3(textOutput("TitleText")),
+                    h3(style = "text-align: center; font-size = 70px;color:black",textOutput("TitleText")),
                     plotlyOutput("map"),
                     h5("Data source:", 
                        tags$a(href="https://github.com/nytimes/covid-19-data", 
