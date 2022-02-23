@@ -904,7 +904,7 @@ shinyServer(function(input, output) {
           hc_yAxis(title = list(text = "Total Death"),
                    tickInterval = 5,
                    max = max(totalDeath$total_death)) %>%
-          hc_title(text = paste0("<b>Total Death")) %>%
+          hc_title(text = paste0("<b>Total Death in US")) %>%
           hc_subtitle(text = "Click and drag in the plot area to zoom in on a time span") %>%
           hc_plotOptions(area = list(lineWidth = 0.5)) %>% 
           hc_exporting(enabled = TRUE)
@@ -919,7 +919,7 @@ shinyServer(function(input, output) {
           hc_yAxis(title = list(text = "Total Death"),
                    tickInterval = 5,
                    max = max(stateDeath$total_death)) %>%
-          hc_title(text = paste0("<b>Total Death")) %>%
+          hc_title(text = paste0("<b>Total Death in New York State")) %>%
           hc_subtitle(text = "Click and drag in the plot area to zoom in on a time span") %>%
           hc_plotOptions(area = list(lineWidth = 0.5)) %>% 
           hc_exporting(enabled = TRUE)
