@@ -21,10 +21,10 @@ Term: Spring 2022
 
 + Team # 13
 + Team Members:
-1. Fang, Wenhui wf2282@columbia.edu
-2. Jung, Hahyung hj2451@columbia.edu
-3. Xia, Yiming yx2686@columbia.edu
-4. Zhang, Ran rz2568@columbia.edu
+  Fang, Wenhui wf2282@columbia.edu
+  Jung, Hahyung hj2451@columbia.edu
+  Xia, Yiming yx2686@columbia.edu
+  Zhang, Ran rz2568@columbia.edu
 
 ## Project summary: 
 + This shiny app is designed to analyze the change on mental health of people under Covid-19 pandemic, and reasons behind it. From the app, the users can find the unemployeement rate, income, and drug usage in the New York City. These factors are possible factors that influence people's mental health. Also, the results from a questionaire from National Social Life, Health, and Aging Project (NSHAP) are also visualized to illustrate mental conditions before and after the pandemic. Combining these two analysis, the users can have a grasp on the mental health under pandemic.
