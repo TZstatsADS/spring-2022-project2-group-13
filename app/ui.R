@@ -38,10 +38,10 @@ shinyUI(dashboardPage(
                menuSubItem("Job",tabName = "job"),
                menuSubItem("Social Networking", tabName = "Interac_plot1"),
                menuSubItem("Mental Health Issues", tabName = "Interac_plot"),
-               menuSubItem("Overdose",tabName = "overdose"),
-               menuSubItem("NYC transportation",tabName = "both"),
-               menuSubItem("Only Subways",tabName = "subway"),
-               menuSubItem("Only Buses", tabName = "bus")
+               menuSubItem("Overdose",tabName = "overdose")
+               #menuSubItem("NYC transportation",tabName = "both"),
+               #menuSubItem("Only Subways",tabName = "subway"),
+               #menuSubItem("Only Buses", tabName = "bus")
           )
           )
   ),
@@ -245,13 +245,12 @@ shinyUI(dashboardPage(
                 
               )),
       
-      tabItem(tabName = "subway", 
-              fluidRow(htmlOutput("ggv_timeline_subway"), width=50, height=700)),
+      #tabItem(tabName = "subway", 
+              #fluidRow(htmlOutput("ggv_timeline_subway"), width=50, height=700)),
       
-      tabItem(tabName = "bus",
-              fluidRow(htmlOutput("ggv_timeline_bus"), width=50, height=700)
-    ),
-    tabItem(tabName = 'both',
+      #tabItem(tabName = "bus",
+              #fluidRow(htmlOutput("ggv_timeline_bus"), width=50, height=700)),
+    #tabItem(tabName = 'both',
             # sidebarLayout(
               # sidebarPanel(width = 12,
                            # 
@@ -264,8 +263,8 @@ shinyUI(dashboardPage(
               # mainPanel(
               #   htmlOutput("ggv_timeline")
               # ))
-            fluidRow(htmlOutput("ggv_timeline"), width=50, height=700)
-            ),
+            #fluidRow(htmlOutput("ggv_timeline"), width=50, height=700)
+            #),
     
     
     
