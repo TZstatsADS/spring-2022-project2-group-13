@@ -38,6 +38,7 @@ library(plotly)
 shinyServer(function(input, output) {
     # setwd('D:/5243/2/spring-2022-project2-group-13')
     setwd('/Users/users/Documents/GitHub/spring-2022-project2-group-13')
+    # setwd('/Users/master/github_repo/spring-2022-project2-group-13')
     
 ###map for covid
 
@@ -878,6 +879,75 @@ shinyServer(function(input, output) {
       
 # >>>>>>> 6bb986fa8b8994c6a45e09e298438127a5b2dd49
     })
+    
+    # >>>>>>>>
+    # Overdose
+    
+    drugOverdose <- read.csv('data/VSRR_Provisional_Drug_Overdose_Death_Counts.csv', na.strings="")
+    
+    # Filter the number of deaths
+    drugOverdose <- filter(drugOverdose, Indicator == "Number of Drug Overdose Deaths")
+    
+    # Remove comma (",") and Covert char into numeric
+    drugOverdose$Data.Value <- as.numeric(gsub(",","",drugOverdose$Data.Value))
+    drugOverdose$Month <- match(drugOverdose$Month,month.name)
+    drugOverdose$Year_Month <- as.Date(paste0(drugOverdose$Year, "-", drugOverdose$Month, "-01"))
+    
+    totalDeath <- drugOverdose %>%                # Specify data frame
+      filter(State == "US") %>%
+      group_by(Year_Month, Year, Month) %>%       # Specify group indicator
+      summarise_at(vars(Data.Value),              # Specify column
+                   list(total_death = sum))       # Specify function
+    
+    stateDeath <- drugOverdose %>%                # Specify data frame
+      filter(State != "US") %>%
+      group_by(State, Year_Month) %>%             # Specify group indicator
+      summarise_at(vars(Data.Value),              # Specify column
+                   list(total_death = sum))       # Specify function
+    
+    output$drugOverdose <- renderPlotly({
+      if (input$overDose_count == 1) {
+        # ggplot 1 
+        graph <- totalDeath %>%
+          ggplot(aes(x = Month, y = total_death, group = Year, colour = Year)) + 
+          geom_line() +
+          #scale_x_discrete(breaks = c[1:12], labels = totalDeath$Month) +
+          ylim(0, NA) +
+          labs(x = "Month", 
+               y = "Total Death",
+               title = "The Number of Drug Overdose Deaths Per Year")
+        graph
+      }
+      else if (input$overDose_count == 2){
+        # ggplot 2 
+        graph <- totalDeath %>% 
+          ggplot() +
+          geom_line(aes(x = Year_Month, y = total_death, group = 1), 
+                    color = "#09557f",
+                    alpha = 0.6,
+                    size = 0.6) +
+          labs(x = "Year", 
+               y = "Total Death",
+               title = "The Number of Drug Overdose Deaths") +
+          theme_minimal()
+        graph
+      }
+      else if (input$overDose_count == 3){
+        # ggplot 3 - state
+        graph <- stateDeath %>%
+          ggplot() +
+          geom_line(aes(x = Year_Month, y = total_death, group = State, colour = State)) +
+          geom_vline(xintercept = 2020-03-01) +
+          labs(x = "Year", 
+               y = "Total Death",
+               title = "The Number of Drug Overdose Deaths Per States")
+        graph
+      }
+      
+    })
+    
+    
+    # <<<<<<<< 
 })
 
 

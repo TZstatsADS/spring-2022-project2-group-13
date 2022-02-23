@@ -38,7 +38,8 @@ shinyUI(dashboardPage(
                menuSubItem("Covid New Case", tabName = "New"),
                menuSubItem("NYC transportation",tabName = "both"),
                menuSubItem("Only Subways",tabName = "subway"),
-               menuSubItem("Only Buses", tabName = "bus")
+               menuSubItem("Only Buses", tabName = "bus"),
+               menuSubItem("Overdose",tabName = "Overdose")
           )
           )
   ),
@@ -283,7 +284,33 @@ shinyUI(dashboardPage(
                tags$a(href="https://raw.githubusercontent.com/nychealth/coronavirus-data/master/trends/data-by-day.csv", 
                       "New York City Job Data"))
             )
-    )
+    ),
+    
+    
+    ###### Overdose #######
+    tabItem(tabName = "Overdose",
+            fluidPage(
+              box(width=20,
+                  sidebarLayout(
+                    sidebarPanel(width = 12,
+                                 selectInput("overDose_count", 
+                                             "The Number of Overdose Deaths",
+                                             choices = c("US" = 1,
+                                                         "Years" = 2,
+                                                         "States" = 3),
+                                             selected = "US")
+                    ),
+                    mainPanel(
+                      plotlyOutput("drugOverdose"),
+                      h5('Data source:',
+                         tags$a(href="https://www.cdc.gov/nchs/nvss/vsrr/drug-overdose-data.htm", 
+                                "National Center for Health Statistics"))
+                    ))
+              )
+              
+            ))
+    
+    
 ))
 ))
 
