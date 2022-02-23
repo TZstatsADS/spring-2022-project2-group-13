@@ -845,7 +845,7 @@ shinyServer(function(input, output) {
     })
     
     
-    income <- read.csv("income.csv", skip = 4)
+    income <- read.csv("data/income.csv", skip = 4)
     income <- income[1,] %>% pivot_longer(cols = contains("20"),
                                           names_to = "date",
                                           values_to = "value")
