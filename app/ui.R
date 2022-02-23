@@ -34,11 +34,11 @@ shinyUI(dashboardPage(
                menuSubItem("Dig by yourself",tabName = "b")),
       menuItem("Analysis", tabName = "Analysis", icon = icon("chart-bar"),
                startExpanded = TRUE,
+               menuSubItem("Covid New Case", tabName = "New"),
                menuSubItem("Job",tabName = "job"),
-               menuSubItem("Overdose",tabName = "overdose"),
                menuSubItem("Social Networking", tabName = "Interac_plot1"),
                menuSubItem("Mental Health Issues", tabName = "Interac_plot"),
-               menuSubItem("Covid New Case", tabName = "New"),
+               menuSubItem("Overdose",tabName = "overdose"),
                menuSubItem("NYC transportation",tabName = "both"),
                menuSubItem("Only Subways",tabName = "subway"),
                menuSubItem("Only Buses", tabName = "bus")
