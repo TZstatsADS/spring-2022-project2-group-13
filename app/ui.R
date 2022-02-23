@@ -23,7 +23,7 @@ linebreaks <- function(n){HTML(strrep(br(), n))}
 shinyUI(dashboardPage(
   # Application title
   skin = "purple",
-  dashboardHeader(title ="NYC EXPRESS",titleWidth = 350),
+  dashboardHeader(title ="Mental Health Under Pandemic",titleWidth = 350),
   dashboardSidebar(
     sidebarMenu(
       menuItem("Home",tabName = "Home", icon = icon("home")),
