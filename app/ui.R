@@ -34,7 +34,7 @@ shinyUI(dashboardPage(
                menuSubItem("Dig by yourself",tabName = "b")),
       menuItem("Analysis", tabName = "Analysis", icon = icon("chart-bar"),
                startExpanded = TRUE,
-               menuSubItem("job",tabName = "job"),
+               menuSubItem("Job",tabName = "job"),
                menuSubItem("Overdose",tabName = "overdose"),
                menuSubItem("Social Networking", tabName = "Interac_plot1"),
                menuSubItem("Mental Health Issues", tabName = "Interac_plot"),
