@@ -21,7 +21,7 @@ Term: Spring 2022
 
 + Team # 13
 + Team Members:
-++   Fang, Wenhui wf2282@columbia.edu
+- Fang, Wenhui wf2282@columbia.edu
 +   Jung, Hahyung hj2451@columbia.edu
 +   Xia, Yiming yx2686@columbia.edu
 +   Zhang, Ran rz2568@columbia.edu
