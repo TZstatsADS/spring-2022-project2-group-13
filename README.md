@@ -26,7 +26,7 @@ Team Members:
 	3. Xia, Yiming yx2686@columbia.edu
 	4. Zhang, Ran rz2568@columbia.edu
 
-## Project summary ##: 
+## Project summary: 
 	This shiny app is designed to analyze the change on mental health of people under Covid-19 pandemic, and reasons behind it. From the app, the users can find the unemployeement rate, income, and drug usage in the New York City. These factors are possible factors that influence people's mental health. Also, the results from a questionaire from National Social Life, Health, and Aging Project (NSHAP) are also visualized to illustrate mental conditions before and after the pandemic. Combining these two analysis, the users can have a grasp on the mental health under pandemic.
 
 + **Contribution statement**: ([default](doc/a_note_on_contributions.md)) All team members contributed equally in all stages of this project. All team members approve our work presented in this GitHub repository including this contributions statement. 
