@@ -17,7 +17,7 @@ The **learning goals** for this project is:
 *The above general statement about project 2 can be removed once you are finished with your project. It is optional.
 
 ## Project Title: Mental Health under pandemic
-##[The link of the app is here:](https://grp13.shinyapps.io/App_mentalHealth/)
+## [The link of the app is here:](https://grp13.shinyapps.io/App_mentalHealth/)
 Term: Spring 2022
 
 + Team # 13
