@@ -84,16 +84,16 @@ shinyUI(dashboardPage(
                            linebreaks(5),
                            h1(style = "text-align: center; font-size = 70px;color:black",strong('Mental Health During the COVID-19 Pandemic')),
                            br(),
-                           tags$blockquote(h2(style = "text-align: justify; font-size = 35px;color:#8f5dff",
+                           tags$blockquote(h2(style = "text-align: justify; font-size = 35px;color:#8f5dff;",
                                               em('One in five'))),
-                           tags$blockquote(h2(style = "text-align: justify; font-size = 35px;color:black",' New Yorkers experiences mental illness in a given year.')),
+                           tags$blockquote(h2(style = "text-align: justify; font-size = 35px;color:black;text-indent: 20mm;",' New Yorkers experiences mental illness in a given year.')),
                            br(),
                            tags$blockquote(h2(style = "text-align: justify; font-size = 35px;color:#8f5dff",
                                               em('Hundreds of thousands'))),
-                           tags$blockquote(h2(style = "text-align: justify; font-size = 35px;color:black",'of these New Yorkers are not connected to care.')),
-                           hr(),
+                           tags$blockquote(h2(style = "text-align: justify; font-size = 35px;color:black;text-indent: 20mm;",'of these New Yorkers are not connected to care.')),
+
                            # h2(textOutput("homeText")),
-                           tags$blockquote(h3(style = "text-align: justify; font-size = 35px;color:black",'We are looking toward a city
+                           tags$blockquote(h3(style = "text-align: center; font-size = 35px;color:black",'We are looking toward a city
                                               where more New Yorkers might be affacted by Covid-19 on mental health. 
                                               We are doing this by analyzing their job status and income status, 
                                               which are among the factors that may lead to mental problems. Similarly, 
@@ -103,13 +103,13 @@ shinyUI(dashboardPage(
                                               Health and Aging Project (NSHAP).
                                               These key analysis might lead to some interesting insights.')),
                            hr(),
-                           linebreaks(5)
+                           linebreaks(10)
                   ))),
         
         tabItem(tabName = "a", 
               fluidPage(
                 box(width=12,
-                    h2(style = "text-align: justify; font-size = 35px;color:black",'Map - Covid Cases per US State'),
+                    h2(style = "text-align: justify; font-size = 35px;color:black;",'Map - Covid Cases per US State'),
                     h4("The map shows the cumulative and death cases per state in US."),
                     h4("Please click on the select box to explore by yourself."),
                     br(),
