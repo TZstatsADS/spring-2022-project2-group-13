@@ -92,6 +92,7 @@ shinyUI(dashboardPage(
                                               em('Hundreds of thousands'))),
                            tags$blockquote(h2(style = "text-align: justify; font-size = 35px;color:black",'of these New Yorkers are not connected to care.')),
                            hr(),
+                           # h2(textOutput("homeText")),
                            tags$blockquote(h3(style = "text-align: justify; font-size = 35px;color:black",'We are looking toward a city
                                               where more New Yorkers might be affacted by Covid-19 on mental health. 
                                               We are doing this by analyzing their job status and income status, 
@@ -102,13 +103,13 @@ shinyUI(dashboardPage(
                                               Health and Aging Project (NSHAP).
                                               These key analysis might lead to some interesting insights.')),
                            hr(),
-                           linebreaks(30)
+                           linebreaks(5)
                   ))),
         
         tabItem(tabName = "a", 
               fluidPage(
                 box(width=12,
-                    h2('Map - Covid Cases per US State'),
+                    h2(style = "text-align: justify; font-size = 35px;color:black",'Map - Covid Cases per US State'),
                     h4("The map shows the cumulative and death cases per state in US."),
                     h4("Please click on the select box to explore by yourself."),
                     br(),
@@ -134,7 +135,7 @@ shinyUI(dashboardPage(
                   
                   # Show map
                   mainPanel(
-                    h2(textOutput("TitleText")),
+                    h2(style = "text-align: justify; font-size = 35px;color:black",textOutput("TitleText")),
                     plotlyOutput("map"),
                     h5("Data source:", 
                        tags$a(href="https://github.com/nytimes/covid-19-data", 

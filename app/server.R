@@ -41,7 +41,11 @@ shinyServer(function(input, output) {
     # setwd('/Users/master/github_repo/spring-2022-project2-group-13')
     
 ###map for covid
-
+    # output$homeText <- renderText(paste('ugs can also reflect mental state of citizens. Finally, we examined how older adults may 
+    #                                           have changed their frequency of contact with others via various mode since the pandemic started, 
+    #                                           and how these choices may be impacting their mental health by using data from the National Social Life, 
+    #                                           Health and Aging Project (NSHAP).'))
+    
     my_map_theme <- function(){
         theme(panel.background=element_blank(),
               axis.text=element_blank(),
