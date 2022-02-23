@@ -179,16 +179,16 @@ shinyUI(dashboardPage(
                         
                         selectInput("count", 
                                     label = "Mental Health Issues",
-                                    choices = c("Physical Health" = 1,
+                                    choices = c("Mental Health" = 5,
+                                                "Physical Health" = 1,
                                                 "Help on Task" = 2,  
                                                 "Relation Happiness" = 3,
                                                 "Emotional Support" = 4,
-                                                "Mental Health" = 5,
                                                 "Physical activity" = 6,
                                                 "Rest time" = 7,
                                                 "Alcohol Comsumption" = 8,
                                                 "Tabacco Comsumption" = 9), 
-                                    selected = "Physical Health")
+                                    selected = "Mental Health")
                         ),
                       mainPanel(
                         plotlyOutput("bar_plt"),
