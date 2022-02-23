@@ -34,13 +34,13 @@ shinyUI(dashboardPage(
       menuItem("Analysis", tabName = "Analysis", icon = icon("chart-bar"),
                startExpanded = TRUE,
                menuSubItem("job",tabName = "job"),
+               menuSubItem("Overdose",tabName = "overdose"),
                menuSubItem("Social Networking", tabName = "Interac_plot1"),
                menuSubItem("Mental Health Issues", tabName = "Interac_plot"),
                menuSubItem("Covid New Case", tabName = "New"),
                menuSubItem("NYC transportation",tabName = "both"),
                menuSubItem("Only Subways",tabName = "subway"),
-               menuSubItem("Only Buses", tabName = "bus"),
-               menuSubItem("Overdose",tabName = "Overdose")
+               menuSubItem("Only Buses", tabName = "bus")
           )
           )
   ),
@@ -84,16 +84,15 @@ shinyUI(dashboardPage(
                            linebreaks(5),
                            h1(style = "text-align: center; font-size = 70px;color:black",strong('Mental Health During the COVID-19 Pandemic')),
                            br(),
-                           tags$blockquote(h2(style = "text-align: justify; font-size = 35px;color:#8f5dff;",
+                           tags$blockquote(h2(style = "text-align: justify; font-size = 35px;color:#8f5dff",
                                               em('One in five'))),
-                           tags$blockquote(h2(style = "text-align: justify; font-size = 35px;color:black;text-indent: 20mm;",' New Yorkers experiences mental illness in a given year.')),
+                           tags$blockquote(h2(style = "text-align: justify; font-size = 35px;color:black",' New Yorkers experiences mental illness in a given year.')),
                            br(),
                            tags$blockquote(h2(style = "text-align: justify; font-size = 35px;color:#8f5dff",
                                               em('Hundreds of thousands'))),
-                           tags$blockquote(h2(style = "text-align: justify; font-size = 35px;color:black;text-indent: 20mm;",'of these New Yorkers are not connected to care.')),
-
-                           # h2(textOutput("homeText")),
-                           tags$blockquote(h3(style = "text-align: center; font-size = 35px;color:black",'We are looking toward a city
+                           tags$blockquote(h2(style = "text-align: justify; font-size = 35px;color:black",'of these New Yorkers are not connected to care.')),
+                           hr(),
+                           tags$blockquote(h3(style = "text-align: justify; font-size = 35px;color:black",'We are looking toward a city
                                               where more New Yorkers might be affacted by Covid-19 on mental health. 
                                               We are doing this by analyzing their job status and income status, 
                                               which are among the factors that may lead to mental problems. Similarly, 
@@ -103,16 +102,17 @@ shinyUI(dashboardPage(
                                               Health and Aging Project (NSHAP).
                                               These key analysis might lead to some interesting insights.')),
                            hr(),
-                           linebreaks(10)
+                           linebreaks(30)
                   ))),
         
         tabItem(tabName = "a", 
-              fluidPage(
                 box(width=12,
-                    h2(style = "text-align: justify; font-size = 35px;color:black;",'Map - Covid Cases per US State'),
+                    h2('Map - Covid Cases per US State'),
                     h4("The map shows the cumulative and death cases per state in US."),
                     h4("Please click on the select box to explore by yourself."),
                     br(),
+              fluidPage(
+                
                 # Application title
                 # titlePanel("Map - Covid Cases per US State"),
                 
@@ -135,7 +135,7 @@ shinyUI(dashboardPage(
                   
                   # Show map
                   mainPanel(
-                    h2(style = "text-align: justify; font-size = 35px;color:black",textOutput("TitleText")),
+                    h3(textOutput("TitleText")),
                     plotlyOutput("map"),
                     h5("Data source:", 
                        tags$a(href="https://github.com/nytimes/covid-19-data", 
@@ -179,7 +179,7 @@ shinyUI(dashboardPage(
                         selectInput("count", 
                                     label = "Mental Health Issues",
                                     choices = c("Physical Health" = 1,
-                                                "Halp on Task" = 2,  
+                                                "Help on Task" = 2,  
                                                 "Relation Happiness" = 3,
                                                 "Emotional Support" = 4,
                                                 "Mental Health" = 5,
@@ -266,8 +266,7 @@ shinyUI(dashboardPage(
             fluidRow(htmlOutput("ggv_timeline"), width=50, height=700)
             ),
     
-    tabItem(tabName = "New",
-            fluidRow(htmlOutput("ggv_timeline_new"), width=50, height=700)),
+    
     
     tabItem(tabName = "job",
             #sidebarLayout(
@@ -276,7 +275,6 @@ shinyUI(dashboardPage(
             # ),
             fluidPage(
             mainPanel(
-              highchartOutput("case",width = "150%",height = "400px"),
               highchartOutput("unemployment_rate",width = "160%",height = "400px"),
               highchartOutput("income",width = "160%",height = "400px")
             ),
@@ -289,28 +287,41 @@ shinyUI(dashboardPage(
     
     
     ###### Overdose #######
-    tabItem(tabName = "Overdose",
+    tabItem(tabName = "overdose",
             fluidPage(
               box(width=20,
                   sidebarLayout(
                     sidebarPanel(width = 12,
                                  selectInput("overDose_count", 
                                              "The Number of Overdose Deaths",
-                                             choices = c("US" = 1,
-                                                         "Years" = 2,
-                                                         "States" = 3),
-                                             selected = "US")
+                                             choices = c("In US" = 1,
+                                                         "In New York State" = 2),
+                                             selected = "In US")
                     ),
                     mainPanel(
-                      plotlyOutput("drugOverdose"),
+                      highchartOutput("drugOverdose"),
                       h5('Data source:',
                          tags$a(href="https://www.cdc.gov/nchs/nvss/vsrr/drug-overdose-data.htm", 
                                 "National Center for Health Statistics"))
                     ))
               )
               
+            )),
+    tabItem(tabName = "New",
+            #sidebarLayout(
+            #  sidebarPanel(
+            #   selectInput("unemployment", "income", c("unemployment", "income"))
+            # ),
+            fluidPage(
+              mainPanel(
+                highchartOutput("case",width = "150%",height = "400px"),
+                highchartOutput("death",width = "150%",height = "400px")
+              ),
+              br(),
+              h5('Data source:',
+                 tags$a(href="https://raw.githubusercontent.com/nychealth/coronavirus-data/master/trends/data-by-day.csv", 
+                        "New York City Job Data"))
             ))
-    
     
 ))
 ))

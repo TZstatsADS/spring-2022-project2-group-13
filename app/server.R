@@ -34,13 +34,14 @@ library(albersusa)
 library(lubridate)
 library(googleVis)
 library(plotly)
+library(highcharter)
 
 shinyServer(function(input, output) {
     # setwd('D:/5243/2/spring-2022-project2-group-13')
-    setwd('/Users/users/Documents/GitHub/spring-2022-project2-group-13')
+    setwd('C:/Users/Rachel/Desktop/new')
     # setwd('/Users/master/github_repo/spring-2022-project2-group-13')
     
-##map for covid
+###map for covid
 
     my_map_theme <- function(){
         theme(panel.background=element_blank(),
@@ -52,8 +53,8 @@ shinyServer(function(input, output) {
     
     us_states_covid <- read_csv("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv", col_types = cols(date = col_date(format = "%Y-%m-%d")))
     # us_states_covid$state
-    state_pop_millions <- read.csv('data/2019_Census_US_Population_Data_By_State_Lat_Long.csv')
-    state_pop_millions
+    state_pop_millions <- read_csv('data/2019_Census_US_Population_Data_By_State_Lat_Long.csv')
+    # state_pop_millions
     state_pop_millions <- state_pop_millions %>%
         rename(`state` = 'STATE',
                `population_millions` = 'POPESTIMATE2019')
@@ -400,6 +401,7 @@ shinyServer(function(input, output) {
     
     # Interactive plot
     mentHeal <- read.csv("data/mentalHealth.csv")
+    
     output$bar_plt <- renderPlotly({
         if (input$count == 1){
             g1 <- mentHeal %>% group_by(physhlth) %>% 
@@ -821,30 +823,12 @@ shinyServer(function(input, output) {
     #  data_by_day %>%
     #    filter(count_type %in% input$count_typeInput)
     #})
-    output$case <-renderHighchart({
-      data_by_day = data_by_day[,c(1,2,5)]%>%
-        tidyr::pivot_longer(
-          cols = -date_of_interest, 
-          names_to = "line_var", 
-          values_to = "value")
-      hchart(data_by_day, "line", hcaes(x = date_of_interest, y = value, group = line_var))%>%
-        hc_chart(zoomType = "x") %>%
-        hc_legend(align = "center", verticalAlign = "bottom",layout = "horizontal") %>%
-        hc_xAxis(title = list(text = "Date"),
-                 labels = list(format = '{value:%b %d %y}')) %>%
-        hc_yAxis(title = list(text = "Count"),
-                 tickInterval = 400,
-                 max = max(data_by_day$value)) %>%
-        hc_title(text = paste0("<b>Covid-19' summary of NYC")) %>%
-        hc_subtitle(text = "Click and drag in the plot area to zoom in on a time span") %>%
-        hc_plotOptions(area = list(lineWidth = 0.5)) %>% 
-        hc_exporting(enabled = TRUE)
-    })
+    
     
     unemployment_rate <-read.csv("data/unemployment.csv")
     unemployment_rate$Label <-as.Date(paste(unemployment_rate$Label,"01",sep=" "),format="%Y %b %d")
     output$unemployment_rate <- renderHighchart({
-      hchart(unemployment_rate, "line", hcaes(x = Label, y = Value, group = 1))%>%
+      hchart(unemployment_rate, "line", hcaes(x = Label, y = Value),color = "brown")%>%
         hc_chart(zoomType = "x") %>%
         hc_legend(align = "center", verticalAlign = "bottom",layout = "horizontal") %>%
         hc_xAxis(title = list(text = "Date"),
@@ -859,12 +843,12 @@ shinyServer(function(input, output) {
     })
     
     
-    income <- read.csv("data/income.csv", skip = 4)
+    income <- read.csv("income.csv", skip = 4)
     income <- income[1,] %>% pivot_longer(cols = contains("20"),
                                           names_to = "date",
                                           values_to = "value")
     output$income <- renderHighchart({
-      hchart(income, "line", hcaes(x = date, y = value, group = 1))%>%
+      hchart(income, "line", hcaes(x = date, y = value),color = "royalblue")%>%
         hc_chart(zoomType = "x") %>%
         hc_legend(align = "center", verticalAlign = "bottom",layout = "horizontal") %>%
         hc_xAxis(title = list(text = "Date"),
@@ -883,8 +867,10 @@ shinyServer(function(input, output) {
     # >>>>>>>>
     # Overdose
     
-    drugOverdose <- read.csv('data/VSRR_Provisional_Drug_Overdose_Death_Counts.csv', na.strings="")
-    
+    drugOverdose <- read.csv('data/VSRR_Provisional_Drug_Overdose_Death_Counts.csv')
+    new_names <- colnames(drugOverdose)
+    new_names[1] <- "State"
+    colnames(drugOverdose)<-new_names
     # Filter the number of deaths
     drugOverdose <- filter(drugOverdose, Indicator == "Number of Drug Overdose Deaths")
     
@@ -903,51 +889,78 @@ shinyServer(function(input, output) {
       filter(State != "US") %>%
       group_by(State, Year_Month) %>%             # Specify group indicator
       summarise_at(vars(Data.Value),              # Specify column
-                   list(total_death = sum))       # Specify function
+                   list(total_death = sum))%>%
+      filter(State == "NY")       # Specify function
     
-    output$drugOverdose <- renderPlotly({
+    output$drugOverdose <- renderHighchart({
       if (input$overDose_count == 1) {
-        # ggplot 1 
-        graph <- totalDeath %>%
-          ggplot(aes(x = Month, y = total_death, group = Year, colour = Year)) + 
-          geom_line() +
-          #scale_x_discrete(breaks = c[1:12], labels = totalDeath$Month) +
-          ylim(0, NA) +
-          labs(x = "Month", 
-               y = "Total Death",
-               title = "The Number of Drug Overdose Deaths Per Year")
-        graph
+        hchart(totalDeath, "line", hcaes(x = Year_Month, y = total_death),color = "green")%>%
+          hc_chart(zoomType = "x") %>%
+          hc_legend(align = "center", verticalAlign = "bottom",layout = "horizontal") %>%
+          hc_xAxis(title = list(text = "Date"),
+                   labels = list(format = '{value:%b %d %y}')) %>%
+          hc_yAxis(title = list(text = "Total Death"),
+                   tickInterval = 5,
+                   max = max(totalDeath$total_death)) %>%
+          hc_title(text = paste0("<b>Total Death")) %>%
+          hc_subtitle(text = "Click and drag in the plot area to zoom in on a time span") %>%
+          hc_plotOptions(area = list(lineWidth = 0.5)) %>% 
+          hc_exporting(enabled = TRUE)
       }
       else if (input$overDose_count == 2){
         # ggplot 2 
-        graph <- totalDeath %>% 
-          ggplot() +
-          geom_line(aes(x = Year_Month, y = total_death, group = 1), 
-                    color = "#09557f",
-                    alpha = 0.6,
-                    size = 0.6) +
-          labs(x = "Year", 
-               y = "Total Death",
-               title = "The Number of Drug Overdose Deaths") +
-          theme_minimal()
-        graph
+        hchart(stateDeath, "line", hcaes(x = Year_Month, y = total_death),color = "blue")%>%
+          hc_chart(zoomType = "x") %>%
+          hc_legend(align = "center", verticalAlign = "bottom",layout = "horizontal") %>%
+          hc_xAxis(title = list(text = "Date"),
+                   labels = list(format = '{value:%b %d %y}')) %>%
+          hc_yAxis(title = list(text = "Total Death"),
+                   tickInterval = 5,
+                   max = max(stateDeath$total_death)) %>%
+          hc_title(text = paste0("<b>Total Death")) %>%
+          hc_subtitle(text = "Click and drag in the plot area to zoom in on a time span") %>%
+          hc_plotOptions(area = list(lineWidth = 0.5)) %>% 
+          hc_exporting(enabled = TRUE)
       }
-      else if (input$overDose_count == 3){
-        # ggplot 3 - state
-        graph <- stateDeath %>%
-          ggplot() +
-          geom_line(aes(x = Year_Month, y = total_death, group = State, colour = State)) +
-          geom_vline(xintercept = 2020-03-01) +
-          labs(x = "Year", 
-               y = "Total Death",
-               title = "The Number of Drug Overdose Deaths Per States")
-        graph
-      }
-      
+
     })
+    output$case <-renderHighchart({
+      data_by_day = data_by_day[,c(1,2,5)]
+      data_by_day %>% 
+      hchart("line", hcaes(x = date_of_interest, y = CASE_COUNT),color = "coral")%>%
+        hc_chart(zoomType = "x") %>%
+        hc_legend(align = "center", verticalAlign = "bottom",layout = "horizontal") %>%
+        hc_xAxis(title = list(text = "Date"),
+                 labels = list(format = '{value:%b %d %y}')) %>%
+        hc_yAxis(title = list(text = "Count"),
+                 tickInterval = 400,
+                 max = max(data_by_day$value)) %>%
+        hc_title(text = paste0("<b>Covid-19' New Cases of NYC")) %>%
+        hc_subtitle(text = "Click and drag in the plot area to zoom in on a time span") %>%
+        hc_plotOptions(area = list(lineWidth = 0.5)) %>% 
+        hc_exporting(enabled = TRUE)
+    })
+    output$death <-renderHighchart({
+      data_by_day = data_by_day[,c(1,2,5)]
+      data_by_day %>% 
+        hchart("line", hcaes(x = date_of_interest, y = DEATH_COUNT),color = "forestgreen")%>%
+        hc_chart(zoomType = "x") %>%
+        hc_legend(align = "center", verticalAlign = "bottom",layout = "horizontal") %>%
+        hc_xAxis(title = list(text = "Date"),
+                 labels = list(format = '{value:%b %d %y}')) %>%
+        hc_yAxis(title = list(text = "Count"),
+                 tickInterval = 400,
+                 max = max(data_by_day$value)) %>%
+        hc_title(text = paste0("<b>Covid-19' New Deaths of NYC")) %>%
+        hc_subtitle(text = "Click and drag in the plot area to zoom in on a time span") %>%
+        hc_plotOptions(area = list(lineWidth = 0.5)) %>% 
+        hc_exporting(enabled = TRUE)
+    })
+    
     
     
     # <<<<<<<< 
 })
+
 
 
