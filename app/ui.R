@@ -14,6 +14,7 @@ library(leaflet)
 library(lubridate)
 library(googleVis)
 library(plotly)
+library(highcharter)
 
 linebreaks <- function(n){HTML(strrep(br(), n))}
 
