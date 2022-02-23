@@ -106,13 +106,12 @@ shinyUI(dashboardPage(
                   ))),
         
         tabItem(tabName = "a", 
+              fluidPage(
                 box(width=12,
                     h2('Map - Covid Cases per US State'),
                     h4("The map shows the cumulative and death cases per state in US."),
                     h4("Please click on the select box to explore by yourself."),
                     br(),
-              fluidPage(
-                
                 # Application title
                 # titlePanel("Map - Covid Cases per US State"),
                 
@@ -135,7 +134,7 @@ shinyUI(dashboardPage(
                   
                   # Show map
                   mainPanel(
-                    h3(textOutput("TitleText")),
+                    h2(textOutput("TitleText")),
                     plotlyOutput("map"),
                     h5("Data source:", 
                        tags$a(href="https://github.com/nytimes/covid-19-data", 
