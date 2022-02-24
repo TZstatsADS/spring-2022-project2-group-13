@@ -34,14 +34,14 @@ shinyUI(dashboardPage(
                menuSubItem("Dig by yourself",tabName = "b")),
       menuItem("Analysis", tabName = "Analysis", icon = icon("chart-bar"),
                startExpanded = TRUE,
-               menuSubItem("Covid New Case", tabName = "New"),
                menuSubItem("Job",tabName = "job"),
+               menuSubItem("Overdose",tabName = "overdose"),
                menuSubItem("Social Networking", tabName = "Interac_plot1"),
                menuSubItem("Mental Health Issues", tabName = "Interac_plot"),
-               menuSubItem("Overdose",tabName = "overdose")
-               #menuSubItem("NYC transportation",tabName = "both"),
-               #menuSubItem("Only Subways",tabName = "subway"),
-               #menuSubItem("Only Buses", tabName = "bus")
+               menuSubItem("Covid New Case", tabName = "New"),
+               menuSubItem("NYC transportation",tabName = "both"),
+               menuSubItem("Only Subways",tabName = "subway"),
+               menuSubItem("Only Buses", tabName = "bus")
           )
           )
   ),
@@ -150,10 +150,11 @@ shinyUI(dashboardPage(
               
       tabItem(tabName = "b", 
         fluidPage(
-          actionButton("free_meals","Free Meals Locations",icon=icon("utensils",  lib = "font-awesome"),style="color: #fff; background-color: #94a4db; border-color: #94a4db"),
           actionButton("health","Mental Health Service",icon=icon("hospital",  lib = "font-awesome"),style="color: #fff; background-color: #94a4db; border-color: #94a4db"),
-          actionButton("textile","Textile Drop-Off Locations",icon=icon("tshirt",  lib = "font-awesome"),style="color: #fff; background-color: #94a4db; border-color: #94a4db"),
           actionButton("job","Directory Of Job Centers",icon=icon("briefcase",  lib = "font-awesome"),style="color: #fff; background-color: #94a4db; border-color: #94a4db"),
+          actionButton("free_meals","Free Meals Locations",icon=icon("utensils",  lib = "font-awesome"),style="color: #fff; background-color: #94a4db; border-color: #94a4db"),
+          actionButton("textile","Textile Drop-Off Locations",icon=icon("tshirt",  lib = "font-awesome"),style="color: #fff; background-color: #94a4db; border-color: #94a4db"),
+
           br(),
           h5('Data source:',
              tags$a(href="https://opendata.cityofnewyork.us/", 
@@ -245,12 +246,13 @@ shinyUI(dashboardPage(
                 
               )),
       
-      #tabItem(tabName = "subway", 
-              #fluidRow(htmlOutput("ggv_timeline_subway"), width=50, height=700)),
+      tabItem(tabName = "subway", 
+              fluidRow(htmlOutput("ggv_timeline_subway"), width=50, height=700)),
       
-      #tabItem(tabName = "bus",
-              #fluidRow(htmlOutput("ggv_timeline_bus"), width=50, height=700)),
-    #tabItem(tabName = 'both',
+      tabItem(tabName = "bus",
+              fluidRow(htmlOutput("ggv_timeline_bus"), width=50, height=700)
+    ),
+    tabItem(tabName = 'both',
             # sidebarLayout(
               # sidebarPanel(width = 12,
                            # 
@@ -263,8 +265,8 @@ shinyUI(dashboardPage(
               # mainPanel(
               #   htmlOutput("ggv_timeline")
               # ))
-            #fluidRow(htmlOutput("ggv_timeline"), width=50, height=700)
-            #),
+            fluidRow(htmlOutput("ggv_timeline"), width=50, height=700)
+            ),
     
     
     
